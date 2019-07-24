@@ -1,0 +1,77 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="ui modal" id="CreateAccontModal">
+    <div class="header">
+        新增帳號
+    </div>
+    <div class="scrolling content">
+        <form id="CreateAccountForm" method="post" class="ui form" autocomplete="off">
+
+            <div class="actions">
+                <button class="ui button red" type="reset" id="resetBtn">重填</button>
+                <button type="button" class="ui grey cancel button">取消</button>
+                <button type="submit" class="ui teal ok button">確定</button>
+            </div>
+
+            <div class="three fields">
+                <div class="field">
+                    <label>帳號*</label>
+                    <input type="text" id="PhoneNumber" />
+                </div>
+
+                <div class="field">
+                    <label>姓名*</label>
+                    <input type="text" id="RealName" />
+                </div>
+
+                <div class="field">
+                    <label>密碼*</label>
+                    <input type="password" id="Password" />
+                </div>
+            </div>
+
+            <div class="three fields">
+                <div class="field">
+                    <label>公司</label>
+                    @Html.DropDownList("CompanyId", new SelectList(ViewBag.CompanyList, "Value", "Text"), new { @class = "ui dropdown" })
+                </div>
+
+                <div class="field">
+                    <label>地區</label>
+                    @Html.DropDownList("AreaId", new SelectList(ViewBag.AreaList, "Value", "Text"), new { @class = "ui dropdown" })
+                </div>
+
+                <div class="field">
+                    <label>角色</label>
+                    @Html.DropDownList("RoleId", new SelectList(ViewBag.RoleList, "Value", "Text"), new { @class = "ui dropdown" })
+                </div>
+            </div>
+
+            <div class="three fields">
+                <div class="field">
+                    <label>功能列表</label>
+                </div>
+
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>
+                                功能名稱
+                            </th>
+
+                            <th>
+                                啟用
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="FunctionList"></tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    
+</div>

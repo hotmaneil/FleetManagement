@@ -1,0 +1,118 @@
+﻿@using ViewModel.Vehicle;
+@using ResourceLibrary;
+
+@model VehicleViewModel
+
+@{
+    var function = Model.VehicleId == 0 ? "新增" : "編輯";
+    ViewBag.Title = function + "車輛";
+}
+
+<div class="ui stackable grid">
+
+    <div class="sixteen wide column">
+        <h3 class="ui header">@ViewBag.Title</h3>
+    </div>
+
+    <div class="sixteen wide column">
+
+        <div class="ui segment">
+            @using (Html.BeginForm("Save", "CarManagement", FormMethod.Post, new { id = "create_form", @class = "ui form" }))
+            {
+                @Html.HiddenFor(model => model.VehicleId)
+
+                <div class="three fields">
+                    <div class="field">
+                        <label>廠商</label>
+                        @Html.ListBox("CompanyIds", new SelectList(ViewBag.CompanyList, "Value", "Text"), new { @class = "ui fluid dropdown", multiple = "" })
+                    </div>
+
+                    <div class="field">
+                        <label>群組名稱</label>
+                        @Html.ListBoxFor(model => model.CompanyGroups, new SelectList(ViewBag.CompanyGroupList, "Value", "Text"), new { @class = "ui fluid dropdown", multiple = "" })
+                    </div>
+
+                    <div class="field">
+                        <label>車號</label>
+                        @Html.TextBoxFor(model => model.LicenseNumber)
+                    </div>
+                </div>
+
+                <div class="three fields">
+                    <div class="field">
+                        <label>車型</label>
+                        @Html.DropDownListFor(model => model.VehicleModelId, new SelectList(ViewBag.VehicleModelList, "Value", "Text"), string.Format(Resource.PleaseSelect, "車型"), new { @class = "ui dropdown" })
+                    </div>
+
+                    <div class="field">
+                        <label>載重</label>
+                        @Html.DropDownListFor(model => model.LoadWeight, new SelectList(ViewBag.LoadWeightList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+
+                    <div class="field">
+                        <label>承載條件</label>
+                        @Html.ListBoxFor(model => model.LoadConditions, new SelectList(ViewBag.LoadConditionList, "Value", "Text"), new { @class = "ui fluid dropdown", multiple = "" })
+                    </div>
+                </div>
+
+                <div class="five fields">
+                    <div class="field">
+                        <label>行照</label>
+                        <img class="ui Medium image" src="~/Vehicle/@Model.LicenseNumber/@Model.LicensePhoto">
+                    </div>
+
+                    <div class="field">
+                        <label>車前照</label>
+                        <img class="ui Medium image" src="~/Vehicle/@Model.LicenseNumber/@Model.FrontPhoto">
+                    </div>
+
+                    <div class="field">
+                        <label>左側照</label>
+                        <img class="ui Medium image" src="~/Vehicle/@Model.LicenseNumber/@Model.LeftSidePhoto">
+                    </div>
+
+                    <div class="field">
+                        <label>右側照</label>
+                        <img class="ui Medium image" src="~/Vehicle/@Model.LicenseNumber/@Model.RightSidePhoto">
+                    </div>
+
+                    <div class="field">
+                        <label>車尾照</label>
+                        <img class="ui Medium image" src="~/Vehicle/@Model.LicenseNumber/@Model.TailPhoto">
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="ui button red" type="reset" id="resetBtn">重填</button>
+                    <button type="button" class="ui grey cancel button" id="backToIndexBtn">取消</button>
+                    <button type="submit" class="ui teal ok button" id="submitBtn">確定</button>
+                </div>}
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/CarManagement',
+            name: 'Scripts/CarManagement',
+            out: '~/Scripts/CarManagement/index.js'
+        });
+        require(["index"]);
+
+        var saveResult = '@Html.Raw(TempData["SaveResult"])';
+        if (saveResult != '') {
+            toastr['error'](saveResult);
+        }
+
+        //重填時清空下拉選單
+        $('#resetBtn').click(function () {
+            $("#CompanyIds").find("option").attr("selected", false);
+            $("#CompanyGroups").find("option").attr("selected", false);
+            $("#LoadConditions").find("option").attr("selected", false);
+        });
+    </script>
+}

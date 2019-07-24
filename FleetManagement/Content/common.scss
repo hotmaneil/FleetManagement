@@ -1,0 +1,228 @@
+﻿body {
+    font-family: Microsoft JhengHei;
+}
+
+.changeWidth {
+    width: calc(100% - 260px);
+    margin-left: 260px;
+}
+
+#sidebar .accordion {
+    & .title {
+        padding: 15px;
+        color: #fff;
+
+        &:hover {
+            color: #fff470;
+        }
+    }
+
+    & .content {
+        color: #fff;
+
+        & .item {
+            &:hover, &.active {
+                color: #fff470;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .computerOnly {
+        display: none;
+    }
+}
+
+.bgyellow {
+    background-color: #fff470;
+}
+
+.bgblue {
+    background-color: #203a68;
+}
+
+.bggreen {
+    background-color: #00bba9;
+}
+
+.bglightergrey {
+    background-color: #e3e3e3;
+}
+
+.bglightgrey {
+    background-color: #f2f2f2;
+}
+
+.label.white {
+    background-color: #fff;
+    border: .5px solid #ccc;
+    box-shadow: none;
+}
+
+.fontyellow {
+    color: #fff470;
+}
+
+.fontblue {
+    color: #203a68;
+}
+
+.pushable .sidebar.menu .item {
+    font-weight: bold;
+
+    &:nth-of-type(1) {
+        color: #fff470;
+    }
+}
+
+#HomeSection .cards .card .content {
+    & .header {
+        color: #2f4f8a;
+    }
+
+    &:nth-of-type(2) .header label {
+        color: #1bc3b3;
+    }
+
+    &:nth-of-type(3) .header label {
+        color: #ff7800;
+    }
+}
+
+div.dashed {
+    border: 1px dashed #203a68;
+    min-height: 10vh;
+}
+
+.ui.modal .scrolling.content {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/*================Modal置中修復==============*/
+// Semantic UI modal position fix
+/*.ui.active.dimmer.modals.transition {
+    display: flex !important;
+    display: -ms-flexbox !important;
+}*/
+.dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.ui.modal,
+.ui.active.modal {
+    margin: 0 auto !important;
+    top: auto !important;
+    left: auto !important;
+    transform-origin: center !important;
+    transition: all ease .5s;
+}
+
+@mixin BasicButton($shadowColor,$fontColor) {
+    -webkit-box-shadow: 0px 0px 0px 1px $shadowColor inset !important;
+    box-shadow: 0px 0px 0px 1px $shadowColor inset !important;
+    color: $fontColor !important;
+}
+
+@mixin BasicButton_HoverActive($shadowColor,$backgroundColor,$fontColor) {
+    -webkit-box-shadow: 0px 0px 0px 1px $shadowColor inset !important;
+    box-shadow: 0px 0px 0px 1px $shadowColor inset !important;
+    background-color: $backgroundColor !important;
+    color: $fontColor !important;
+}
+
+@mixin Button($backgroundColor,$fff,$hoverColor) {
+    background-color: $backgroundColor;
+    color: #fff;
+
+    &:hover, &:active {
+        background-color: $hoverColor;
+    }
+}
+/*================自定義組件樣式==========================*/
+/*===============
+   按鈕
+==================*/
+.ui.button {
+    &.cusblue {
+        @include Button(#203a68,#fff,#324d7d);
+    }
+
+    &.cusorange {
+        @include Button(#ff7800,#fff,#ff4e00);
+    }
+
+    &.cusgrey {
+        @include Button(#959595,#fff,#8f8b8b);
+    }
+
+    &.custeal {
+        @include Button(#00bba9,#fff,#00aabb);
+    }
+
+    &.cusgreen {
+        @include Button(#49993B,#fff,#448d31);
+    }
+}
+
+.ui.button.basic {
+    &.cusblue {
+        @include BasicButton( #203a68,#203a68);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#486497,#203a68,#fff);
+        }
+    }
+
+    &.cusorange {
+        @include BasicButton( #ff7800,#ff7800);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#bb5e0a,#bb5e0a,#bb5e0a);
+        }
+    }
+
+    &.cusgrey {
+        @include BasicButton( ##959595,#959595);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#696970,#696970,#696970);
+        }
+    }
+
+    &.custeal {
+        @include BasicButton(#00bba9,#fff);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#00bba9,#00aabb,#fff);
+        }
+    }
+
+    &.cusred {
+        @include BasicButton(#d31812,#d31812);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#d31812,#d31812,#fff);
+        }
+    }
+
+    &.cuspurple {
+        @include BasicButton(#7f36b7,#7f36b7);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#7f36b7,#7f36b7,#fff);
+        }
+    }
+
+    &.cusgreen {
+        @include BasicButton(#49993B,#49993B);
+
+        &:hover, &:active {
+            @include BasicButton_HoverActive(#49993B,#49993B,#fff);
+        }
+    }
+}

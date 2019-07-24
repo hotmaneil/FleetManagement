@@ -1,0 +1,100 @@
+﻿@using ViewModel.Customer;
+
+@model CustomerViewModel
+
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <h3 class="ui header">編輯客戶</h3>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            @using (Html.BeginForm("Save", "CustomerManage", FormMethod.Post, new { @class = "ui form", role = "form",id= "EditCustomerForm" }))
+            {
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.CompanyId)
+                @Html.HiddenFor(model => model.OriginTaxNumber)
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>車行統編</label>
+                        @Html.TextBoxFor(model => model.TaxNumber, new { placeholder = "請輸入車行統編" })
+                    </div>
+
+                    <div class="field">
+                        <label>客戶名稱</label>
+                        @Html.TextBoxFor(model => model.Name, new { placeholder = "請輸入客戶名稱" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>主聯絡人</label>
+                        @Html.TextBoxFor(model => model.MainContacter, new { placeholder = "請輸入主聯絡人" })
+                    </div>
+
+                    <div class="field">
+                        <label>聯絡電話</label>
+                        @Html.TextBoxFor(model => model.ContactPhoneNumber, new { placeholder = "請輸入聯絡電話" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>副聯絡人</label>
+                        @Html.TextBoxFor(model => model.SubContacter, new { placeholder = "請輸入副聯絡人" })
+                    </div>
+
+                    <div class="field">
+                        <label>負責人</label>
+                        @Html.TextBoxFor(model => model.PersonInCharge, new { placeholder = "請輸入負責人" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label></label>
+                    </div>
+
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="As" id="AsMainContacter">
+                                <label>同主聯絡人</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="As" id="AsSubContacter">
+                                <label>同副聯絡人</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui two column centered grid">
+                    <button type="button" class="ui grey cancel button" id="backToIndexBtn">取消</button>
+                    <button type="submit" class="ui teal ok button" id="submitBtn">送出</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/Customer',
+            name: 'Scripts/Customer',
+            out: '~/Scripts/Customer/index.js'
+        });
+        require(["index"]);
+
+        var saveResult = '@Html.Raw(TempData["SaveResult"])';
+        if (saveResult != '') {
+            toastr['success'](saveResult);
+        }
+    </script>
+}

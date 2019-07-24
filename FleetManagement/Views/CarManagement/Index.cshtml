@@ -1,0 +1,76 @@
+﻿@using ViewModel.Vehicle
+@using System.Web.Configuration;
+@model VehicleSearchViewModel
+
+@{
+    ViewBag.Title = "車輛管理首頁";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+
+        <div class="sixteen wide column">
+            <button id="btnCreateVehicle" class="ui button teal right floated">新增車輛<i class="add icon"></i></button>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="ui header cusgreen">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post">
+                <div class="fields">
+                    <div class="four wide field">
+                        <label>車號</label>
+                        @Html.TextBoxFor(model => model.SearchLicenseNumber, new { placeholder = "請輸入車號" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label>公司</label>
+                        @Html.DropDownListFor(model => model.SearchCompanyId, new SelectList(ViewBag.CompanyList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label style="visibility:hidden;">功能列表</label>
+                        <button class="ui button cusgreen" type="submit" name="search">查詢</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="ui segment">
+            <div id="dataTable">
+                <div class="ui info message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        可選擇下拉選單的項目進行查詢
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '@RelativePath' + 'Scripts/CarManagement',
+            name: 'Scripts/CarManagement',
+            out: '~/Scripts/CarManagement/index.js'
+        });
+        require(["index"]);
+
+        var saveResult = '@Html.Raw(TempData["SaveResult"])';
+        if (saveResult != '') {
+            toastr['success']('儲存成功!');
+        }
+    </script>
+}

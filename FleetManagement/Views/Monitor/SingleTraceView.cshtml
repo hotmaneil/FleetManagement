@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_BlankLayout.cshtml";
+}
+
+@Html.Partial("~/Views/Map/_GoogleMapJS.cshtml")
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/Trace/_CommonTraceMap.cshtml")
+
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/Monitor',
+            name: 'Scripts/Monitor',
+            out: '~/Scripts/Monitor/singleTraceView.js'
+        });
+        require(["singleTraceView"]);
+    </script>
+}

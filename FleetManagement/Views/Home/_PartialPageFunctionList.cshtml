@@ -1,0 +1,126 @@
+﻿@using ViewModel.WebFunctions;
+@model IEnumerable<WebFunctionListModel>
+
+@helper GenerateTree(IEnumerable<WebFunctionModel> nodes, string nodeID)
+{
+    var lang = System.Threading.Thread.CurrentThread.CurrentUICulture.ToString();
+    if (nodes.Any(x => x.ParentIId == nodeID))
+    {
+        foreach (var item in nodes.Where(x => x.ParentIId == nodeID).OrderBy(x => x.DefaultSort))
+        {
+            var menuText = item.FunctionName;
+            if (lang.ToLower() == "zh-cn") { menuText = item.FunctionNameSC; }
+            if (lang.ToLower() == "en-us") { menuText = item.FunctionNameEN; }
+
+            var u = ((null == item.Area || "" == item.Area) ? item.Controller : item.Area + "/" + item.Controller);
+            @:
+            <a class="item" href="@Url.Action(item.ActionName, u)" title="@menuText" data-click="@item.Id">@menuText</a>
+            @GenerateTree(nodes, item.IId)
+        }
+    }
+}
+
+<div class="ui accordion" style="padding-top:60px;">
+    @{
+        var lang = System.Threading.Thread.CurrentThread.CurrentUICulture.ToString();
+        foreach (var row in Model)
+        {
+            var menuText = row.FunctionName;
+            if (lang.ToLower() == "zh-cn") { menuText = row.FunctionNameSC; }
+            if (lang.ToLower() == "en-us") { menuText = row.FunctionNameEN; }
+            row.LastLevel.ToString();
+            if (row.LastLevel == true)
+            {
+                var u = ((null == row.Area || "" == row.Area) ? row.Controller : row.Area + "/" + row.Controller);
+                <a class="item" href="@Url.Action(row.ActionName,u)" title="@menuText" data-click="@row.Id">@menuText</a>
+            }
+            else
+            {
+                <a class="title item" id="M-@row.IId">@menuText<i class="dropdown icon large"></i></a>
+                <div class="content" id="@row.IId">
+                    @GenerateTree(@row.SubList, @row.IId)
+                </div>
+            }
+        }
+    }
+</div>
+@ViewBag.servertime
+
+@*<div class="ui accordion" style="padding-top:60px;">
+
+        <a class="item" href="@Url.Action("Index","Home")">
+            總覽中心
+        </a>
+
+        <a class="item" href="@Url.Action("Index","Monitor")">
+            即時監控
+        </a>
+
+        <a class="item" href="@Url.Action("Index","Trace")">
+            軌跡查詢
+        </a>
+
+        <a class="title item">
+            營業管理<i class="dropdown icon large"></i>
+        </a>
+
+        <div class="content" id="businessManageContent">
+            <a class="item" href="@Url.Action("Index","Mission")">
+                任務管理
+            </a>
+
+            <a class="item" href="@Url.Action("Index","OrderClientService")">
+                訂車客服
+            </a>
+
+            <a class="item" href="@Url.Action("Index","GrabOrder")">
+                網路搶單
+            </a>
+
+            <a class="item" href="@Url.Action("Index","Dispatch")">
+                任務調派
+            </a>
+
+            <a class="item" href="@Url.Action("Index","VehicleSchedules")">
+                路線管理
+            </a>
+        </div>
+
+        <a class="title item">
+            營業報表<i class="dropdown icon large"></i>
+        </a>
+
+        <div class="content" id="reportContent">
+            <a class="item" href="@Url.Action("MonthReport","Report")">
+                月報表
+            </a>
+
+            <a class="item" href="@Url.Action("DayReport","Report")">
+                日報表
+            </a>
+
+            <a class="item" href="@Url.Action("DetailReport","Report")">
+                明細報表
+            </a>
+        </div>
+
+        <a class="title item" href="@Url.Action("Index","CustomerManage")">
+            客戶管理<i class="icon large"></i>
+        </a>
+
+        <a class="title item">
+            車輛收支管理<i class="dropdown icon large"></i>
+        </a>
+
+        <div class="content" id="incomeStatementContent">
+            <a class="item" href="@Url.Action("Index","IncomeStatement")">
+                收支管理記帳本
+            </a>
+
+            <a class="item" href="@Url.Action("Report","IncomeStatement")">
+                收支管理報表
+            </a>
+        </div>
+    </div>*@
+
+

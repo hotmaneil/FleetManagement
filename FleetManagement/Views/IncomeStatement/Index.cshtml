@@ -1,0 +1,205 @@
+﻿@using ViewModel.IncomeStatement
+@using System.Web.Configuration;
+@model IncomeStatementSearchViewModel
+
+@{
+    ViewBag.Title = "收支管理記帳本";
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+@Styles.Render("~/Content/DatepickerCss")
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="QueryHeader">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post">
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>時間</label>
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.CreateTime, new { placeholder = "請輸入時間" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>車號</label>
+                        @Html.DropDownListFor(model => model.SearchVehicleId, new SelectList(ViewBag.VehicleLicenseNumberList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="four wide field" style="margin:auto;">
+                        <button class="ui custeal button circular fluid" type="submit">查詢</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="sixteen wide column">
+            <div class="ui top attached segment">
+                <div class="ui stackable grid equal width">
+
+                    <div class="column left aligned">
+                        <h3 class="ListHeader">
+                            <span id="SearchDate"></span>
+                            收支管理記帳本
+                        </h3>
+                        <button class="small ui teal button" id="btnCreateIncomeStatement">
+                            <i class="plus icon"></i>
+                            新增流水帳
+                        </button>
+                    </div>
+
+                    <div class="sixteen wide column">
+
+                        <div class="row">
+                            <form id="exportForm">
+                                <select class="ui dropdown" id="exportType">
+                                    <option value="Excel">Excel</option>
+                                    @*<option value="Pdf">Pdf</option>*@
+                                </select>
+                                <button class="ui facebook button" type="submit" id="submitBtn">輸出</button>
+                                @*<button class="ui grey button" type="button" id="PrintBtn">Print</button>*@
+                            </form>
+                            @using (Html.BeginForm("DownLoadIncomeStatementReportExcel", "IncomeStatement", FormMethod.Post, new { @id = "DownLoadExcel" }))
+                            {
+                            }
+                        </div>
+
+                        @*<div class="row" style="margin-top:10px;">
+                                <div class="ui search">
+                                    <div class="ui icon input">
+                                        <input class="prompt" type="text" placeholder="請輸入關鍵字" id="SearchWord">
+                                        <i class="search icon"></i>
+                                    </div>
+                                    <div class="results"></div>
+                                </div>
+                            </div>*@
+
+                        <div class="ui segment">
+                            <div id="dataTable">
+                                <div class="ui info message">
+                                    <i class="close icon"></i>
+                                    <div class="header">
+                                        可輸入關鍵字進行查詢
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="CreateIncomeStatementModel" class="ui mini modal">
+
+    <div class="header">
+        新增收支明細
+    </div>
+
+    <div class="content">
+        <form class="ui form" id="CreateIncomeStatementForm">
+
+            @Html.Hidden("Id")
+
+            @Html.Hidden("CompanyId")
+
+            <div class="field">
+                <label>車號</label>
+                @Html.DropDownList("VehicleId", new SelectList(ViewBag.VehicleIdSelectList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="field">
+                <label>項目</label>
+                @Html.DropDownList("SpendItem", new SelectList(ViewBag.SpendItemList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="field">
+                <label>金額</label>
+                <input type="text" id="money" name="money" placeholder="金額">
+            </div>
+
+            <div class="field">
+                <label>頻率</label>
+                @Html.DropDownList("Frequence", new SelectList(ViewBag.FrequencyList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="actions center aligned">
+                <div class="ui basic center aligned segment">
+                    <div class="ui cancel deny button large circular">
+                        取消
+                    </div>
+                    <button type="submit" class="ui ok custeal button large circular">儲存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/DatepickerJs")
+
+@section Scripts{
+    <script src="~/Content/bower_components/tabularJS/js/tabulator.js"></script>
+    <script src="~/Content/bower_components/tabularJS/js/xlsx.full.min.js" type="text/javascript"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+
+    <script src="~/Content/bower_components/semanticUI-Calendar/calendar.min.js"></script>
+    <link href="~/Content/bower_components/semanticUI-Calendar/calendar.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        $(function () {
+
+            requirejs.config({
+                baseUrl: '@RelativePath'+'Scripts/IncomeStatement',
+                name: 'Scripts/IncomeStatement',
+                out: '~/Scripts/IncomeStatement/index.js',
+                paths: {
+                    "tabulator": "../../Content/bower_components/tabularJS/js/tabulator.js",
+                    "pdfmake": "../../Content/bower_components/pdfmake/build/pdfmake.min",
+                    "vfs_fonts": "../../Content/bower_components/pdfmake/build/vfs_fonts",
+                    "sharedfunction": "../Shared/function",
+                    "sharedmodule": "../Shared/module",
+                    "sharedtemplete": "../Shared/templete",
+                    "sharedvfs": "../Shared/vfs",
+                    "module": "module",
+                    "service": "service",
+                    "index": "index"
+                }
+            });
+            require(["index"]);
+
+            $("#createBtn").click(function () {
+                $('#createModel').modal('show');
+            });
+
+            $("#editBtn").click(function () {
+                $('#editModel').modal('show');
+            });
+
+            $("#CreateTime").datepicker({
+                dateFormat: "yy/mm/dd"
+            });
+        });
+    </script>
+}

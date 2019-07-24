@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "角色與權限管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="ui equal width stackable grid">
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+        <div class="column">
+            <!--車隊管理員角色不能擁有"新增角色"功能-->
+            <button id="btnCreateRole" class="ui disabled button teal right floated" type="button">新增角色 <i class="add icon"></i></button>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="eight wide column">
+            <div class="ui segment left aligned" style="min-height:80vh;">
+                <h3 class="ui blue heading" style="color:#203a68;">角色列表</h3>
+                <table id="RoleListTable" class="ui selectable celled stackable table">
+                    <thead>
+                        <tr>
+                            <th>序</th>
+                            <th>角色名稱</th>
+                            <th>角色說明</th>
+                            <th>使用帳號數</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="center aligned">
+                                <h3 class="ui header">系統將載入資料，請稍候</h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="searchResult" class="eight wide column">
+            <div class="sixteen wide column">
+                <div class="ui segment" style="min-height:80vh;">
+                    <div class="ui info message" id="ShowMessage">
+                        <h3>您還沒有選擇角色，請先點選左側角色列表</h3>
+                    </div>
+                    <div class="ui top attached tabular menu">
+                        <a class="active item" data-tab="first">符合此權限帳戶</a>
+                        <a class="item" data-tab="second">開放功能</a>
+                    </div>
+                    <div class="ui bottom attached active tab segment" data-tab="first">
+                        @Html.Partial("_UseAccountResult", "Role")
+                        <div id="AccountList">
+                            <div class="row">
+
+                                <table id="AccountListTable" class="ui selectable celled stackable table">
+                                    <thead>
+                                        <tr>
+                                            <th>車隊</th>
+                                            <th>角色編碼</th>
+                                            <th>使用者帳戶</th>
+                                            <th>姓名</th>
+                                            <th>行動電話</th>
+                                            <th>建立者</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="center aligned">
+                                                <h3 class="ui header">點選左側角色列表的使用帳號數，即可查看帳戶列表</h3>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui bottom attached tab segment  left aligned" data-tab="second" style="overflow-y:auto;">
+                        <div class="ui basic segment right aligned">
+                            <button id="saveFuntionList" class="ui disabled red button large">更新</button>
+                        </div>
+                        <div class="ui celled relaxed list" id="FuncttionListPanel">
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--新增角色權限-->
+<div id="CreateRoleModal" class="ui modal">
+    <div class="header">
+        <h3 class="ui fontblue heading left aligned">新增角色</h3>
+    </div>
+    <div class="content">
+        <form id="CreateRoleForm" method="post" class="ui form">
+            <div class="two fields">
+                <div class="field">
+                    <label>角色定義</label>
+                    <input type="text" placeholder="例如:FleetManager" pattern="[A-Za-z0-9]" title="只允許輸入英文字母和數字" required />
+                </div>
+                <div class="field">
+                    <label>角色說明</label>
+                    <input type="text" placeholder="例如:車隊管理員" required pattern="[^()/><\][\\\x22,;|]+" title="不能輸入符號" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <button type="button" class="ui grey cancel button">取消</button>
+        <button type="button" class="ui teal ok button">確定</button>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/bower_components/tabularJS/js/tabulator.js"></script>
+    <script src="~/Content/bower_components/tabularJS/js/xlsx.full.min.js" type="text/javascript"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: 'Scripts/Role',
+            paths: {
+                "tabulator": "../../Content/bower_components/tabularJS/js/tabulator.js",
+                "pdfmake": "../../Content/bower_components/pdfmake/build/pdfmake.min",
+                "vfs_fonts": "../../Content/bower_components/pdfmake/build/vfs_fonts",
+                "sharedfunction": "../Shared/function",
+                "sharedmodule": "../Shared/module",
+                "sharedtemplete": "../Shared/templete",
+                "sharedvfs": "../Shared/vfs",
+                "module": "module",
+                "service": "service",
+                "index": "index",
+            },
+            name: 'Scripts/Role',
+            out: '~/Scripts/Role/index.js'
+        });
+        require(["index"]);
+    </script>
+}
+
+

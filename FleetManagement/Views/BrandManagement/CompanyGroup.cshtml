@@ -1,0 +1,91 @@
+﻿@using ViewModel.Company;
+@model ViewModel.Company.CompanyGroupCollection
+
+@{
+    ViewBag.Title = "公司群組頁";
+    int itemRowNum = 0;
+}
+
+@helper companyGroupFormItem(CompanyGroupViewModel item, int itemRowNum)
+{
+    if (Model.CompanyGroupList != null)
+    {
+        <form id="CompanyGroupVehicle_@item.GroupId">
+
+            <div class="ui styled fluid accordion">
+                <div class="title">
+
+                    @item.GroupName
+
+                    <table>
+                        <tr>
+                            <th>
+                                <i class="dropdown icon"></i>
+                                <input type="text" id="GroupName_@item.GroupId" value="@item.GroupName" placeholder="請輸入群組名稱">
+                                <button class="ui  circular cusgreen button" type="button" id="EditCompanyGroup" editGroupId="@item.GroupId">修改</button>
+                                <button class="ui red circular button" type="button" id="DeleteCompanyGroup" deleteGroupId="@item.GroupId">刪除</button>
+                                <button class="ui  circular cusgreen button" type="button" id="EditCompanyGroupVehicle" editGroupVehicle="@item.GroupId" Control="WebAccount">編輯廠商車隊車輛</button>
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                @(item.VehicleLicenseNumbers != null ? string.Join(" , ", item.VehicleLicenseNumbers) : "")
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </form>
+    }
+}
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui huge breadcrumb">
+            <a class="section">@ViewBag.Title</a>
+        </div>
+    </div>
+</div>
+
+<div class="ui grid">
+    <div class="sixteen wide column">
+        @Html.HiddenFor(model => model.Company.CompanyId)
+        <div class="ui orange inverted segment">群組</div>
+
+        <div id="CompanyGroupsBody">
+            @foreach (var item in Model.CompanyGroupList)
+            {
+                @companyGroupFormItem(item, itemRowNum++);
+            }
+        </div>
+
+        <!--加群組-->
+        <div class="content">
+            <form class="ui form right aligned" id="CompanyGroupsForm">
+                <div class="field">
+                    <div class="ui action input">
+                        <input type="text" id="GroupName" placeholder="請輸入群組名稱">
+                        <button type="submit" class="ui teal button"><i class="icon add"></i>加群組</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div>
+            <button type="button" class="ui blue button" id="backToWebAccountBtn">回上一頁</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/BrandManagement',
+            name: 'Scripts/BrandManagement',
+            out: '~/Scripts/BrandManagement/index.js'
+        });
+        require(["index"]);
+    </script>
+}

@@ -1,0 +1,338 @@
+﻿@using ViewModel.Booking;
+@using System.Web.Configuration;
+@using ViewModel.Enum;
+
+@model BookingQuoteCollection
+
+@{
+    ViewBag.Title = "調派任務";
+
+    int itemRowNum = 0;
+
+    string SubTitle = " - ";
+    if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+    {
+        SubTitle += "車行任務(可以變更所有欄位)";
+    }
+    else
+    {
+        SubTitle += "App任務 (只能變更司機)";
+    }
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+@helper GoodsPhotoList(BookingGoodsPhotoContainer item, int itemRowNum)
+{
+    <div class="card">
+        <div class="image">
+            <img src="~/PhotoGoods/@Model.Booking.GoodOwnerId/@Model.Booking.MessageId/@item.PhotoFileName" />
+        </div>
+
+        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+        {
+            <div class="extra">
+                <button class="ui inverted red button"
+                        BookingGoodsPhotoId="@item.Id"
+                        GoodOwnerId="@Model.Booking.GoodOwnerId"
+                        MessageId="@Model.Booking.MessageId"
+                        PhotoFileName="@item.PhotoFileName">
+                    刪除圖片
+                </button>
+            </div>
+        }
+    </div>
+}
+
+<link href="~/Content/bower_components/Datetimepicker/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Content/bower_components/moment/moment.js"></script>
+<script src="~/Content/bower_components/Datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <h3 class="ui header">@ViewBag.Title</h3>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            @using (Html.BeginForm("Save", "Dispatch", FormMethod.Post, new { @class = "ui form", role = "form", enctype = "multipart/form-data" }))
+            {
+                <h3 class="QueryHeader">@ViewBag.Title @SubTitle</h3>
+
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(model => model.Booking.MessageId)
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>貨主姓名</label>
+                        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                        {
+                            @Html.DropDownListFor(model => model.Booking.GoodOwnerId, new SelectList(ViewBag.GoodOwnerList, "Value", "Text"), new { @class = "ui search dropdown" })
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.Booking.GoodOwnerId)
+                            @Html.DisplayTextFor(model => model.Booking.GoodOwnerName)
+                        }
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>聯絡電話</label>
+                        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                        {
+                            @Html.TextBoxFor(model => model.Booking.GoodOwnerPhoneNumber)
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.Booking.GoodOwnerPhoneNumber)
+                            @Html.DisplayTextFor(model => model.Booking.GoodOwnerPhoneNumber)
+                        }
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>預約上車</label>
+                        <div>
+                            <div class="ui input left icon">
+                                @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                                {
+                                    <i class="calendar icon"></i>
+                                    @Html.TextBoxFor(model => model.Booking.BookingDate)
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(model => model.Booking.BookingDate)
+                                    @Html.DisplayTextFor(model => model.Booking.BookingDate)
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>接貨地點</label>
+                        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                        {
+                            @Html.TextBoxFor(model => model.Booking.StartAddress)
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.Booking.StartAddress)
+                            @Html.DisplayTextFor(model => model.Booking.StartAddress)
+                        }
+
+                        @Html.HiddenFor(model => model.Booking.StartAreaLevel12)
+                        @Html.HiddenFor(model => model.Booking.StartAreaLevel3)
+                        @Html.HiddenFor(model => model.Booking.StartPostalCode)
+                        @Html.HiddenFor(model => model.Booking.StartLat)
+                        @Html.HiddenFor(model => model.Booking.StartLng)
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>訂單建立時間</label>
+                        @Html.DisplayFor(model => model.Booking.CreateTime)
+                    </div>
+
+                    <div class="field">
+                        <label>送達地點</label>
+                        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                        {
+                            @Html.TextBoxFor(model => model.Booking.TargetAddress)
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.Booking.TargetAddress)
+                            @Html.DisplayTextFor(model => model.Booking.TargetAddress)
+                        }
+
+                        @Html.HiddenFor(model => model.Booking.TargetAreaLevel12)
+                        @Html.HiddenFor(model => model.Booking.TargetAreaLevel3)
+                        @Html.HiddenFor(model => model.Booking.TargetPostalCode)
+                        @Html.HiddenFor(model => model.Booking.TargetLat)
+                        @Html.HiddenFor(model => model.Booking.TargetLng)
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>貨品尺寸</label>
+                        <div class="ui right labeled input">
+                            @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                            {
+                                @Html.TextBoxFor(model => model.Booking.GoodsSizeLength, new { @Placeholder = "長" })
+                                @Html.TextBoxFor(model => model.Booking.GoodsSizeWide, new { @Placeholder = "寬" })
+                                @Html.TextBoxFor(model => model.Booking.GoodsSizeHeight, new { @Placeholder = "高" })
+
+                                <div class="ui basic label">
+                                    cm
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.DisplayTextFor(model => model.Booking.GoodsSizeLength)
+                                @:cm X
+                                @Html.DisplayTextFor(model => model.Booking.GoodsSizeWide)
+                                @:cm X
+                                @Html.DisplayTextFor(model => model.Booking.GoodsSizeHeight)
+                                @:cm
+
+                                @Html.HiddenFor(model => model.Booking.GoodsSizeLength)
+                                @Html.HiddenFor(model => model.Booking.GoodsSizeWide)
+                                @Html.HiddenFor(model => model.Booking.GoodsSizeHeight)
+                            }
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>貨品重量</label>
+                        <div class="ui right labeled input">
+                            @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                            {
+                                @Html.TextBoxFor(model => model.Booking.GoodsWeight)
+                                <div class="ui basic label">
+                                    kg
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.DisplayTextFor(model => model.Booking.GoodsWeight)
+                                @Html.HiddenFor(model => model.Booking.GoodsWeight)
+                                @:kg
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>貨品照片</label>
+
+                        <div class="ui four cards" id="ImageList">
+                            @foreach (var item in Model.Booking.BookingGoodsPhotoList)
+                            {
+                                @GoodsPhotoList(item, itemRowNum++)
+                            }
+                        </div>
+
+                        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                        {
+                            <input type="file" id="goodsPhotoUpload" name="goodsPhotoUpload" multiple="multiple" />
+                        }
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>其他備註</label>
+                        @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                        {
+                            @Html.TextBoxFor(model => model.Booking.AdditionMessage)
+                        }
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="two field">
+                        <label>貨主期望車趟費用</label>
+                        <div class="ui right labeled input">
+                            @if (Model.Booking.OrderCompanyId == Model.Booking.QuotedCompanyId)
+                            {
+                                @Html.TextBoxFor(model => model.Booking.EstimatedFare)
+                                <div class="ui basic label">
+                                    元
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.DisplayTextFor(model => model.Booking.EstimatedFare)
+                                @Html.HiddenFor(model => model.Booking.EstimatedFare)
+                                @:元
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    @Html.HiddenFor(model => model.DriverQuotePrice.MessageId)
+                    <div class="field">
+                        <label>車主</label>
+                        <!--車主-->
+                        @Html.HiddenFor(model => model.DriverQuotePrice.OldDriverId)
+                        @Html.DropDownListFor(model => model.DriverQuotePrice.DriverId, new SelectList(ViewBag.DriverList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+
+                    <div class="field">
+                        <label>車號</label>
+                        @Html.DropDownListFor(model => model.DriverQuotePrice.VerhicleId, new SelectList(ViewBag.VehicleLicenseNumberList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>報價</label>
+                        @if (Model.Booking.ProcessStatus>= (byte)BookingProcessStatusEnum.ConfirmTransaction)
+                        {
+                            @Html.DisplayFor(model => model.DriverQuotePrice.QuotedPrice)
+                        }
+                    </div>
+
+                    <div class="field">
+                        <label>成交價</label>
+                        @Html.DisplayFor(model => model.Booking.OfferPrice)
+                    </div>
+                </div>
+
+                <!-- 已成交的 -->
+                @Html.HiddenFor(model => model.Booking.DriverId)
+                @Html.HiddenFor(model => model.Booking.VehicleId)
+                @Html.HiddenFor(model => model.Booking.OfferPrice)
+                @Html.HiddenFor(model => model.Booking.ProcessStatus)
+
+                <br />
+
+                <div class="ui two column centered grid">
+                    <button type="button" class="ui grey cancel button" id="backToIndexBtn">取消</button>
+                    <button type="submit" class="ui teal ok button" id="submitBtn">修改訂單</button>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '@RelativePath' + 'Scripts/Dispatch',
+            name: 'Scripts/Dispatch',
+            out: '~/Scripts/Dispatch/dispatch.js'
+        });
+        require(["dispatch"]);
+
+        $(function () {
+            //更換另一個日月曆元件
+            //$('#BookingDate').calendar({
+            //    type: 'date',
+            //    text: {
+            //        months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            //        monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+            //    },
+            //    formatter: {
+            //        date: function (date, settings) {
+            //            return moment(date).format("YYYY/MM/DD");
+            //        }
+            //    }
+            //});
+
+            var bookingDate = $('#Booking_BookingDate').val();
+            $('#Booking_BookingDate').val(bookingDate);
+            jQuery('#Booking_BookingDate').datetimepicker();
+            jQuery.datetimepicker.setLocale('zh-TW');
+        });
+    </script>
+}

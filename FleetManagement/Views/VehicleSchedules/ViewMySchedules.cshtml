@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "路線管理首頁";
+    ViewBag.SubTitle = "個人路線管理";
+}
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section" href="@Url.Action("Index","VehicleSchedules")">@ViewBag.Title</a>
+                <i class="right angle icon divider"></i>
+                <div class="active section">@ViewBag.SubTitle</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="sixteen wide column">
+            <div class="ui top attached segment">
+                <div class="ui stackable grid equal width">
+
+                    <div class="column left aligned">
+                        <h3 class="ListHeader">個人路線管理</h3>
+                        <div class="row">
+                            <button class="small ui teal button" id="CreateScheduleBtn">
+                                <i class="plus icon"></i>
+                                新增路線
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="column right aligned">
+
+                        <div class="row" style="margin-top:10px;">
+                            <input id="DriverId" name="DriverId" type="hidden" value="@ViewBag.DriverId" />
+
+                            <h4 class="ui grey header">@ViewBag.DriverName</h4>
+                            <div class="ui search">
+                                <div class="ui icon input">
+                                    <input class="prompt" type="text" placeholder="請輸入關鍵字" id="SearchWord">
+                                    <button class="ui icon button" id="SearchBtn">
+                                        <i class="search icon"></i>
+                                    </button>
+                                </div>
+                                <div class="results"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui attached segment left aligned">
+                <div id="SearchResult">
+                    <div class="ui icon blue message">
+                        <i class="search icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                請先輸入查詢條件
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/VehicleSchedules',
+            name: 'Scripts/VehicleSchedules',
+            out: '~/Scripts/VehicleSchedules/viewMySchedules.js'
+        });
+        require(["viewMySchedules"]);
+
+        var saveResult = '@Html.Raw(TempData["SaveResult"])';
+        if (saveResult != '') {
+            toastr['success'](saveResult);
+        }
+    </script>
+}
+

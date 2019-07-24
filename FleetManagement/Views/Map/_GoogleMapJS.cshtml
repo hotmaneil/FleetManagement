@@ -1,0 +1,8 @@
+﻿@using System.Configuration;
+@{
+    string bingmapkey = ConfigurationManager.AppSettings["BundleMapKey"];
+}
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry,drawing,places&key=@bingmapkey"></script>
+
+

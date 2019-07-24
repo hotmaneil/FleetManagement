@@ -1,0 +1,77 @@
+﻿@using ViewModel.Customer;
+@using System.Web.Configuration;
+@model CustomerSearchViewModel
+
+@{
+    ViewBag.Title = "客戶管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+
+        <div class="sixteen wide column">
+            <button id="btnCreateCustomer" class="ui button teal right floated">新增客戶<i class="add icon"></i></button>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="QueryHeader">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post">
+
+                <div class="two fields">
+                    <div class="four wide field">
+                        <label>公司統編</label>
+                        @Html.TextBoxFor(model => model.SearchTaxNumber, null, new { placeholder = "" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label style="visibility:hidden;">功能列表</label>
+                        <button class="ui button circular teal" type="submit" name="search">查詢</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="ui segment">
+            <div id="dataTable">
+                <div class="ui info message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        可輸入關鍵字進行查詢
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--新增Modal-->
+@Html.Partial("_CreateCustomerModal")
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '@RelativePath'+'Scripts/Customer',
+            name: 'Scripts/Customer',
+            out: '~/Scripts/Customer/index.js'
+        });
+        require(["index"]);
+
+        var saveResult = '@Html.Raw(TempData["SaveResult"])';
+        if (saveResult != '') {
+            toastr['success'](saveResult);
+        }
+    </script>
+}

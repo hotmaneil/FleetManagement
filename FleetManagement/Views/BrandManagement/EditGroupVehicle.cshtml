@@ -1,0 +1,119 @@
+﻿@using ViewModel.Company;
+@model GroupVehiclesViewModel
+
+@{
+    ViewBag.Title = Model.CompanyName + "車隊 " + Model.GroupName + "群組 車輛編輯頁面";
+
+    var sourceList = new SelectList(new List<SelectListItem>(), "Value", "Text");
+
+    if (Model.GroupVehicleSelectListItemList != null)
+    {
+        sourceList = new SelectList(Model.GroupVehicleSelectListItemList, "Value", "Text", Model.GroupVehicleSelectListItemList.Select(x => x.Value));
+    }
+
+    var notSelectedUserVehicleList = new List<SelectListItem>();
+    var allVehicleList = new List<SelectListItem>();
+    allVehicleList = ViewBag.VehicleList;
+
+    foreach (var vehicleItem in allVehicleList)
+    {
+        if (sourceList.Any(x => x.Value == vehicleItem.Value))
+        {
+            continue;
+        }
+        notSelectedUserVehicleList.Add(vehicleItem);
+    }
+}
+
+<style>
+    .listboxPorperty {
+        width: 250px;
+        height: 200px;
+    }
+</style>
+
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui huge breadcrumb">
+            <a class="section">@ViewBag.Title</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="ui grid">
+    @using (Html.BeginForm("UpdatetGroupVehicles", "BrandManagement", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.CompanyId)
+        @Html.HiddenFor(model => model.GroupId)
+        @Html.HiddenFor(model => model.SaveResult)
+
+        <table class="ui celled table">
+            <tr>
+                <th>
+                    已選取
+                </th>
+
+                <th>
+
+                </th>
+
+                <th>
+                    未選取
+                </th>
+            </tr>
+
+            <tr>
+                <th>
+                    @Html.ListBox("sourceUserVehicleList", sourceList, new { @Class = "listboxPorperty" })
+                </th>
+
+                <th>
+                    <div>
+                        <i class="angle left icon" id="addVehicle"></i>
+                        <i class="angle right icon" id="removeVehicle"></i>
+                    </div>
+                </th>
+
+                <th>
+                    @Html.ListBox("notSelectedUserVehicleList", notSelectedUserVehicleList, new { @Class = "listboxPorperty" })
+                </th>
+            </tr>
+        </table>
+
+        <div class="field">
+            <button type="submit" class="ui teal ok button" id="UpdateCompanyGroupVehiclesBtn">更新</button>
+            @if (Session["Control"].ToString() == "BrandManagement")
+            {
+                <button type="button" class="ui blue button" id="backToEditBtn">回上一頁</button>
+            }
+            else if (Session["Control"].ToString() == "WebAccount")
+            {
+                <button type="button" class="ui blue button" id="backToCompanyGroupBtn">回上一頁</button>
+            }
+        </div>
+    }
+
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/BrandManagement',
+            name: 'Scripts/BrandManagement',
+            out: '~/Scripts/BrandManagement/index.js'
+        });
+        require(["index"]);
+
+        var modelIsSuccess = "@Model.SaveResult";
+        if (modelIsSuccess != "") {
+            if (isSuccess = "True") {
+                toastr['success']('儲存成功!');
+            } else {
+                toastr['success']('儲存失敗!');
+            }
+        }
+    </script>
+}

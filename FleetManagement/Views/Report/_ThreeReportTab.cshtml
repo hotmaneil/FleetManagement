@@ -1,0 +1,62 @@
+﻿
+<div class="ui top attached segment" id="ThreeReportTab">
+    <div class="ui stackable grid equal width">
+
+        <div class="column left aligned">
+            <h3 class="ListHeader">
+                <span id="yearLabel"></span>年
+                <span id="monthLabel"></span>月份
+                統計報表
+            </h3>
+        </div>
+
+        <div class="column right aligned">
+            <div class="row">
+                <form id="exportForm">
+                    <select class="ui dropdown" id="exportType">
+                        <option value="Excel">Excel</option>
+                        @*<option value="Pdf">Pdf</option>*@
+                    </select>
+                    <button class="ui facebook button" type="submit" id="submitBtn">輸出</button>
+                    @*<button class="ui grey button" id="PrintBtn">Print</button>*@
+                </form>
+
+                @using (Html.BeginForm("DownLoadExcel", "Report", FormMethod.Post, new { @id = "DownLoadExcelDriver" }))
+                {
+                    @Html.Hidden("TabType","Driver")
+                }
+
+                @using (Html.BeginForm("DownLoadExcel", "Report", FormMethod.Post, new { @id = "DownLoadExcelCustomer" }))
+                {
+                    @Html.Hidden("TabType", "Customer")
+                }
+
+                @using (Html.BeginForm("DownLoadExcel", "Report", FormMethod.Post, new { @id = "DownLoadExcelVehicle" }))
+                {
+                    @Html.Hidden("TabType", "Vehicle")
+                }
+            </div>
+        </div>
+
+        <div class="ui top attached tabular custabular menu" id="reportTab">
+            <a class="item active" data-tab="driverTab" id="driverTab">司機</a>
+            <a class="item" data-tab="vehicleTab" id="vehicleTab">車輛</a>
+            <a class="item" data-tab="customerTab" id="customerTab">客戶</a>
+        </div>
+
+        <div class="ui bottom attached tab segment active" data-tab="driverTab">
+            <div id="driverMStatistics">
+            </div>
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="vehicleTab">
+            <div id="vehicleStatistics">
+            </div>
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="customerTab">
+            <div id="customerStatistics">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿
+<div class="ui top attached segment">
+    <div class="ui stackable grid equal width">
+
+        <div class="column left aligned">
+            <h3 class="ListHeader">
+                <span id="_UserName"></span>
+                @ViewBag.SubTitle
+            </h3>
+        </div>
+
+        <div class="column right aligned">
+            <div class="ui grid">
+                <div class="fourteen wide column">
+                    <form id="exportForm">
+                        <select class="ui dropdown" id="exportType">
+                            <option value="Excel">Excel</option>
+                            @*<option value="Pdf">Pdf</option>*@
+                        </select>
+                        <button class="ui facebook button" type="submit" id="submitBtn">輸出</button>
+                    </form>
+                    @using (Html.BeginForm("DownLoadMonthDailyExcel", "Report", FormMethod.Post, new { @id = "DownLoadExcel" }))
+                    {
+                    }
+                </div>
+                <div class="two wide column">
+                    <div></div>
+                    @*<button class="ui grey button" id="PrintBtn">Print</button>*@
+                </div>
+            </div>
+
+            @*<div class="row" style="margin-top:10px;">
+            <div class="ui search">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" placeholder="請輸入關鍵字" id="SearchWord">
+                    <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+            </div>
+        </div>*@
+        </div>
+
+        <div id="DailyStatisticsTable">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNet.Identity;
+@{ var userName = System.Web.HttpContext.Current.User.Identity.Name; }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡車幫車隊管理系統網站</title>
+
+    <!--facebook設定-->
+    <meta property="og:url" content="#" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:title" content="拖救車科紀化派遣系統網站" />
+    <meta property="og:description" content="提供中華民國政府對拖救車科紀化派遣的系統化管控服務" />
+    <meta property="og:image" content="縮圖的連結位置" />
+
+    <!--Twitter卡數據-->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="publisher_handle">
+    <meta name="twitter:title" content="Page Title">
+    <meta name="twitter:description" content="頁面描述少於200個字符">
+    <meta name="twitter:creator" content="author_handle">
+
+    <!--Twitter摘要卡圖片必須至少為120x120px-->
+    <meta name="twitter:image" content="http//www.example.com/image.jpg">
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+    @Styles.Render("~/Content/css")
+    @RenderSection("Styles", false)
+</head>
+<body>
+    <div class="ui grid">
+        <div class="sixteen wide column">
+            @RenderBody()
+        </div>
+        <div class="sixteen wide column center aligned">
+            <footer>&copy; 中租迪和股份有限公司 Chailease Finance Co.,Ltd. All Rights Reserved.</footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.js?features=fetch,Promise"></script>
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+    <!-----共通函式----------------------------->
+    <script>
+        $('.ui.dropdown').dropdown();
+        $('.ui.checkbox').checkbox();
+        $('.ui.accordion').accordion();
+        toastr.options.positionClass = "toast-bottom-center";
+    </script>
+
+</body>
+</html>

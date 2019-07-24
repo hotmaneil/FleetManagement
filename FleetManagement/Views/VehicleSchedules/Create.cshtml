@@ -1,0 +1,194 @@
+﻿@using ViewModel.VehicleSchedules;
+
+@model VehicleScheduleViewModel
+
+@{
+    var function = Model.Id != 0 ? "編輯" : "新增";
+    ViewBag.Title = "路線管理";
+    ViewBag.SubTitle = function;
+}
+
+@Styles.Render("~/Content/DatepickerCss")
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui huge breadcrumb">
+            <a class="section" href="@Url.Action("Index","VehicleSchedules")">@ViewBag.Title</a>
+            <i class="right angle icon divider"></i>
+            <div class="active section">@ViewBag.SubTitle</div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+
+        <div class="ui segment">
+            @using (Html.BeginForm("Save", "VehicleSchedules", FormMethod.Post, new { @class = "ui form", role = "form", id = "CreateOrEditForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>車號</label>
+                        @Html.DropDownListFor(model => model.VehicleId, new SelectList(ViewBag.VehicleLicenseNumberList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>接貨地區</label>
+                        @Html.DropDownListFor(model => model.StartPostalCode, new SelectList(ViewBag.SelectAreaList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="field">
+                        <label>送貨地區</label>
+                        @Html.DropDownListFor(model => model.TargetPostalCode, new SelectList(ViewBag.SelectAreaList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>出發時間</label>
+                        <div id="StartDepartureHour">
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.StartDepartureHour, null, new { placeholder = "請輸入出發時間" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>返回時間</label>
+                        <div id="TargetDepartureHour">
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.TargetDepartureHour, null, new { placeholder = "請輸入返回時間" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>單次路線日期</label>
+                        @*class="ui calendar"*@
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.OneDay, null, new { placeholder = "單次路線日期" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two field">
+                    <div class="field">
+                        <label>送貨時頻率</label>
+                    </div>
+                </div>
+
+                <div class="two fields">
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodMon)
+                        <label>星期一</label>
+                    </div>
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodTue)
+                        <label>星期二</label>
+                    </div>
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodWed)
+                        <label>星期三</label>
+                    </div>
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodThu)
+                        <label>星期四</label>
+                    </div>
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodFri)
+                        <label>星期五</label>
+                    </div>
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodSat)
+                        <label>星期六</label>
+                    </div>
+
+                    <div class="ui checkbox">
+                        @Html.CheckBoxFor(model => model.EffectPeriodSun)
+                        <label>星期日</label>
+                    </div>
+
+                </div>
+
+                <div class="two field">
+                    <div class="field">
+                        <label>指派司機</label>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>司機姓名</label>
+                        @Html.DropDownListFor(model => model.DriverId, new SelectList(ViewBag.SelectDriverList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="field">
+                        <label>期望報價</label>
+                        @Html.TextBoxFor(model => model.QuotedPrice, null, new { placeholder = "請輸入期望報價" })
+                    </div>
+                </div>
+
+                <div class="ui two column centered grid">
+                    <button type="button" class="ui grey cancel button" id="backToIndexBtn">取消</button>
+                    <button type="submit" class="ui teal ok button" id="submitBtn">儲存</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/DatepickerJs")
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/VehicleSchedules',
+            name: 'Scripts/VehicleSchedules',
+            out: '~/Scripts/VehicleSchedules/create.js'
+        });
+        require(["create"]);
+
+        $(function () {
+            $("#backToIndexBtn").click(function () {
+
+                if ("@TempData["ClickFrom"]" == "index") {
+                    window.location.href = "Index";
+                } else if ("@TempData["ClickFrom"]" == "viewMySchedules") {
+                    var driverId = $("#DriverId").val();
+                    window.location.href = "ViewMySchedules?DriverId=" + driverId;
+                }
+            });
+
+            //$("#StartDepartureHour").calendar({
+            //    type: 'time'
+            //});
+
+            //$("#TargetDepartureHour").calendar({
+            //    type: 'time'
+            //});
+
+            $("#OneDay").datepicker({
+                dateFormat: "yy/mm/dd"
+            });
+        });
+    </script>
+}
+

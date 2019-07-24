@@ -1,0 +1,93 @@
+﻿@using ResourceLibrary;
+@using ViewModel.User;
+@using System.Web.Configuration;
+
+@model AccountSearchViewModel
+
+@{
+    ViewBag.Title = "帳號管理首頁";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+<div class="ui stackable grid">
+
+    <div class="row right aligned">
+
+        <div class="two wide column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+
+        <div class="fourteen wide column">
+            <button id="btnCreateAccount" class="ui button teal right floated">新增帳號<i class="add icon"></i></button>
+        </div>
+
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="ui header cusgreen">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post">
+
+                <div class="fields">
+                    <!--帳號、地區、角色-->
+                    <div class="four wide field">
+                        <label>帳號</label>
+                        @Html.TextBoxFor(model => model.Account, new { placeholder = "請輸入帳號" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label>地區</label>
+                        @Html.DropDownListFor(model => model.Area, new SelectList(ViewBag.SelectAreaList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label>角色</label>
+                        @Html.DropDownListFor(model => model.Role, new SelectList(ViewBag.SelectRoleList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label style="visibility:hidden;">功能列表</label>
+                        <button class="ui button cusgreen" type="submit" name="search">查詢</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="ui segment">
+            <div id="dataTable">
+                <div class="ui info message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        可選擇下拉選單的項目進行查詢
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增帳號 -->
+@Html.Partial("_CreateAccontModal")
+
+<!-- 變更密碼 -->
+@Html.Partial("_ChangePasswordModal")
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '@RelativePath'+'Scripts/WebAccount',
+            name: 'Scripts/WebAccount',
+            out: '~/Scripts/WebAccount/index.js'
+        });
+        require(["index"]);
+
+        var saveResult = '@Html.Raw(TempData["SaveResult"])';
+        if (saveResult != '') {
+            toastr['success']('儲存成功!');
+        }
+    </script>
+}

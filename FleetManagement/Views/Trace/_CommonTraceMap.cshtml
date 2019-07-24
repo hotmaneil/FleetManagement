@@ -1,0 +1,98 @@
+﻿<div class="four wide column">
+
+
+    <div class="ui top attached segment">
+        <div class="ui stackable grid equal width">
+
+            <div class="sixteen wide column">
+                <h4 class="ui dividing green header">
+                    軌跡顯示 <i class="icon play circle outline tiny"></i>
+                </h4>
+
+                <form class="ui form">
+                    <div class="three fields">
+                        <div class="field">
+                            <button class="ui button basic teal fluid" id="PlayTraceBtn" type="button">重頭播放</button>
+                        </div>
+                        <div class="field">
+                            <button class="ui button basic red fluid" id="StopTraceBtn" type="button">軌跡暫停</button>
+                        </div>
+                        <div class="field">
+                            <button class="ui button basic yellow fluid" id="ContinueTraceBtn" type="button">繼續播放</button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <select class="ui fluid search dropdown" id="ShowDropdown"></select>
+                        <style id="word-search"></style>
+                    </div>
+                </form>
+            </div>
+
+            <div class="sixteen wide column darkblue">
+                <h4 class="ui dividing blue header">軌跡資料<i class="icon map pin tiny"></i></h4>
+                <div id="traceList" class="ui list cuslist  animated relaxed trace" style="height:85vh;overflow-y:scroll;">
+
+                    <div class="item white">
+                        <div class="content">
+                            <h5 class="ui header green"><span class="ui label teal">小秘訣</span></h5>
+                            <div class="description">
+                                請先輸入查詢條件，查詢後，直接點選軌跡資料的查詢結果，就可以看到該點定位
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="twelve wide column">
+
+    <div class="ui segment">
+
+        <div class="ui grid">
+            <div class="twelve wide column">
+                <h3 class="QueryHeader">車輛軌跡</h3>
+            </div>
+            <div class="four wide column right aligned">
+                <span>車號</span>
+                <span id="VehicleLicenseNumber"></span>
+                <img class="ui middle aligned tiny image" id="imgSrc" src="" />
+            </div>
+        </div>
+
+        <div class="twelve wide darkblue column" style="padding:0;margin:0;min-height:100%;max-height:100%;">
+
+            <!--地圖-->
+            <div id="traceMap" style="width:100%;height:100%;min-height:100vh;min-width:100%;padding-top:100px;">
+            </div>
+
+            <!--地圖資訊-->
+            <div class="dark_mapinfo" id="traceinfo">
+                <div class="ui equal width  stackable grid left aligned">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui list">
+                                <div class="item">查詢時間:<span></span></div>
+                                <div class="item">司機姓名:<span></span></div>
+                                <div class="item">司機電話:<span></span></div>
+                                <div class="item">車牌號碼:<span></span></div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="item">訂單:<span></span></div>
+                            <div class="item">狀態:<span></span></div>
+                            <div class="item">位置:<span></span></div>
+                            <div class="item">車速:<span></span>km/hr</div>
+                        </div>
+                        <div class="column">
+                            <div class="item">GPS:<span></span></div>
+                            <div class="item">4G:<span></span>dbm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--地圖資訊結束-->
+        </div>
+    </div>
+</div>

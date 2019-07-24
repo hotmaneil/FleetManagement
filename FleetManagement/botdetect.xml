@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--設置Login中Botdetect Captch的樣式-->
+<botdetect xmlns="https://captcha.com/schema/net"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://captcha.com/schema/net 
+         https://captcha.com/schema/net/botdetect-BD4_NET_TC.xsd">
+  <captchaStyles>
+    <captchaStyle>
+      <name>captcha</name>
+      <userInputID>CaptchaCodeID</userInputID>
+      <codeLength>4</codeLength>
+      <locale>en-US</locale>
+      <customLightColor>Yellow</customLightColor>
+      <customDarkColor>SlateBlue</customDarkColor>
+      <imageWidth>150</imageWidth>
+      <imageHeight>50</imageHeight>
+      <soundFormat>WavPcm16bit8kHzMono</soundFormat>
+    </captchaStyle>
+  </captchaStyles>
+</botdetect>

@@ -1,0 +1,107 @@
+﻿@using FleetManagement.Models
+@using BotDetect.Web.Mvc;
+@model LoginViewModel
+@{
+    ViewBag.Title = "登入";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "ui big form", role = "form", @style = "min-width:270px;" }))
+{
+    @Html.AntiForgeryToken()
+    <h4 class="ui center aligned  header" style="margin-top:4.54vh">會員登入</h4>
+
+    <div class="field">
+        <div class="ui left labeled input">
+            @Html.LabelFor(m => m.Username, new { @class = "ui basic label white" })
+            @Html.TextBoxFor(m => m.Username, new { @placeholder = "請輸入手機號碼" })
+        </div>
+
+    </div>
+
+    <div class="field">
+        @Html.ValidationMessageFor(m => m.Username, "", new { @style = "color:red;" })
+    </div>
+
+    <div class="field">
+        <div class="ui left labeled input">
+            @Html.LabelFor(m => m.Password, new { @class = "ui basic label white" })
+            @Html.PasswordFor(m => m.Password, new { @placeholder = "請輸入密碼", @id = "password" })
+            <button class="ui icon button basic fontyellow" type="button" onclick="PasswordVisible();" id="ValidateBtn">
+                <i class="eye slash icon"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <div class="field">
+        @Html.ValidationMessageFor(m => m.Password, "", new { @style = "color:red;" })
+    </div>
+
+    <div class="inline fields">
+        <div class="ten wide field" style="min-width:200px;">
+            @{
+                MvcCaptcha captcha = new MvcCaptcha("captcha");
+                captcha.UserInputID = "CaptchaCode";
+            }
+            @Html.Captcha(captcha)
+        </div>
+
+        <div class="twelve wide field">
+            <div class="ui input ten wide field">
+                @Html.TextBox("CaptchaCode")
+            </div>
+            @Html.ValidationMessage("CaptchaCode")
+        </div>
+    </div>
+
+    <div>
+        <br />
+        <br />
+        <br />
+    </div>
+
+    <div class="field">
+        <div class="ui checked checkbox" style="float:right;margin-bottom:10px;">
+            @Html.CheckBoxFor(m => m.RememberMe, new { })
+            @Html.LabelFor(m => m.RememberMe, new { })
+        </div>
+    </div>
+
+    <div class="field">
+        <button class="ui grey button fluid large" style="background-color:#4a4a4a;color:#e0dc9d;">登入</button>
+    </div>
+
+    @*<div class="field" style="text-align:center;">
+        <div class="two fields">
+            <div class="field">
+                <a href="#">註冊會員</a>
+            </div>
+            <div class="field">
+                <a href="@Url.Action("ForgotPassword","Account")">忘記密碼</a>
+            </div>
+        </div>
+    </div>*@
+}
+
+@section Scripts {
+    <script>
+
+        function PasswordVisible() {
+            var x = document.getElementById("password");
+            var y = document.getElementById("ValidateBtn");
+            if (x.type === "password") {
+                x.type = "text";
+                y.innerHTML = '<i class="eye icon"></i>';
+            } else {
+                x.type = "password";
+                y.innerHTML = '<i class="eye slash icon"></i>';
+            }
+        }
+
+        var loginResult = '@Html.Raw(TempData["LoginResult"])';
+        if (loginResult != '') {
+            toastr['error'](loginResult);
+        }
+    </script>
+}

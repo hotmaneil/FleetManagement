@@ -1,0 +1,714 @@
+﻿@charset "UTF-8";
+
+body {
+    font-family: Microsoft JhengHei;
+}
+
+.changeWidth {
+    width: calc(100% - 260px);
+    margin-left: 260px;
+}
+
+#sidebar .accordion .title {
+    padding: 15px;
+    color: #fff;
+}
+
+    #sidebar .accordion .title:hover {
+        color: #fff470;
+    }
+
+#sidebar .accordion .content {
+    color: #fff;
+}
+
+    #sidebar .accordion .content .item:hover, #sidebar .accordion .content .item.active {
+        color: #fff470;
+    }
+
+@media only screen and (max-width: 768px) {
+    .computerOnly {
+        display: none;
+    }
+}
+
+.bgyellow {
+    background-color: #fff470;
+}
+
+.bgblue {
+    background-color: #203a68;
+}
+
+.bggreen {
+    background-color: #00bba9;
+}
+
+.bglightergrey {
+    background-color: #e3e3e3;
+}
+
+.bglightgrey {
+    background-color: #f2f2f2;
+}
+
+.pushable .sidebar.menu .item {
+    font-weight: bold;
+}
+
+    .pushable .sidebar.menu .item:nth-of-type(1) {
+        color: #fff470;
+    }
+
+div.dashed {
+    border: 1px dashed #203a68;
+    min-height: 10vh;
+}
+
+.ui.modal .scrolling.content {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/*===========
+    font
+==============*/
+.fontyellow {
+    color: #fff470;
+}
+
+.fontblue {
+    color: #203a68;
+}
+
+.fontorange {
+    color: #ff7800;
+}
+
+.fontgrey {
+    color: #b9b9b9;
+}
+
+.fontdarkgrey {
+    color: #959595;
+}
+
+.fontbold {
+    font-weight: bold;
+}
+
+/*================Modal置中修復==============*/
+/*.ui.active.dimmer.modals.transition {
+    display: flex !important;
+    display: -ms-flexbox !important;
+}*/
+.dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.ui.modal,
+.ui.active.modal {
+    margin: 0 auto !important;
+    top: auto !important;
+    left: auto !important;
+    transform-origin: center !important;
+    transition: all ease .5s;
+}
+
+/*================自定義組件樣式==========================*/
+/*===============
+   按鈕
+==================*/
+.ui.button.cusblue {
+    background-color: #203a68;
+    color: #fff;
+}
+
+    .ui.button.cusblue:hover, .ui.button.cusblue:active {
+        background-color: #324d7d;
+    }
+
+.ui.button.cusorange {
+    background-color: #ff7800;
+    color: #fff;
+}
+
+    .ui.button.cusorange:hover, .ui.button.cusorange:active {
+        background-color: #ff4e00;
+    }
+
+.ui.button.cusgrey {
+    background-color: #959595;
+    color: #fff;
+}
+
+    .ui.button.cusgrey:hover, .ui.button.cusgrey:active {
+        background-color: #8f8b8b;
+    }
+
+.ui.button.custeal {
+    background-color: #00bba9;
+    color: #fff;
+}
+
+    .ui.button.custeal:hover, .ui.button.custeal:active {
+        background-color: #00aabb;
+    }
+
+.ui.button.basic.cusblue {
+    -webkit-box-shadow: 0px 0px 0px 1px #203a68 inset !important;
+    box-shadow: 0px 0px 0px 1px #203a68 inset !important;
+    color: #203a68 !important;
+}
+
+    .ui.button.basic.cusblue:hover, .ui.button.basic.cusblue:active {
+        -webkit-box-shadow: 0px 0px 0px 1px #486497 inset !important;
+        box-shadow: 0px 0px 0px 1px #486497 inset !important;
+        background-color: #203a68 !important;
+        color: #fff !important;
+    }
+
+.ui.button.basic.cusorange {
+    -webkit-box-shadow: 0px 0px 0px 1px #ff7800 inset !important;
+    box-shadow: 0px 0px 0px 1px #ff7800 inset !important;
+    color: #ff7800 !important;
+}
+
+    .ui.button.basic.cusorange:hover, .ui.button.basic.cusorange:active {
+        -webkit-box-shadow: 0px 0px 0px 1px #bb5e0a inset !important;
+        box-shadow: 0px 0px 0px 1px #bb5e0a inset !important;
+        color: #bb5e0a !important;
+    }
+
+.ui.button.basic.cusgrey {
+    -webkit-box-shadow: 0px 0px 0px 1px #959595 inset !important;
+    box-shadow: 0px 0px 0px 1px #959595 inset !important;
+    color: #959595 !important;
+}
+
+    .ui.button.basic.cusgrey:hover, .ui.button.basic.cusgrey:active {
+        -webkit-box-shadow: 0px 0px 0px 1px #696970 inset !important;
+        box-shadow: 0px 0px 0px 1px #696970 inset !important;
+        color: #696970 !important;
+    }
+
+.ui.button.basic.custeal {
+    -webkit-box-shadow: 0px 0px 0px 1px #00bba9 inset !important;
+    box-shadow: 0px 0px 0px 1px #00bba9 inset !important;
+    color: #00bba9 !important;
+}
+
+    .ui.button.basic.custeal:hover, .ui.button.basic.custeal:active {
+        -webkit-box-shadow: 0px 0px 0px 1px #00aabb inset !important;
+        box-shadow: 0px 0px 0px 1px #00aabb inset !important;
+        background-color: #00aabb !important;
+        color: #fff !important;
+    }
+
+.ui.button.basic.cusred {
+    -webkit-box-shadow: 0px 0px 0px 1px #d31812 inset !important;
+    box-shadow: 0px 0px 0px 1px #d31812 inset !important;
+    color: #d31812 !important;
+}
+
+    .ui.button.basic.cusred:hover, .ui.button.basic.cusred:active {
+        -webkit-box-shadow: 0px 0px 0px 1px #d31812 inset !important;
+        box-shadow: 0px 0px 0px 1px #d31812 inset !important;
+        background-color: #d31812 !important;
+        color: #fff !important;
+    }
+
+/*============
+    menu tab
+==============*/
+/*.ui.secondary.menu .item{
+    background-color:#dddddd;
+    color:#6d6d6d;
+}
+.ui.secondary.menu .active.item{
+    background-color:#ff7800;
+    color:#fff;
+}*/
+.ui.secondary.menu .item {
+    background-color: #dddddd;
+    color: #6d6d6d;
+}
+
+    .ui.secondary.menu .item.active {
+        background-color: #ff7800;
+        color: #fff;
+    }
+
+.ui.secondary.menu.cusblue .item {
+    border-bottom: 2px solid #dedede;
+    background-color: #fff;
+    color: #203a68;
+}
+
+    .ui.secondary.menu.cusblue .item.active {
+        border-bottom: 5px solid #203a68;
+        font-weight: bold;
+    }
+
+.ui.tabular.menu.custabular {
+    color: #b6b6b6;
+}
+
+    .ui.tabular.menu.custabular .active.item {
+        border-top: 5px solid #00bba9;
+        color: #00bba9;
+        font-weight: bold;
+    }
+
+/*=============================
+       Accrodition
+=================================*/
+.ui.accordion.menu.cusborderless {
+    border: 0;
+    -webkit-box-shadow: 0;
+    box-shadow: 0;
+}
+
+.ui.accordion.menu .item .title {
+    font-size: 1.2rem;
+}
+
+    .ui.accordion.menu .item .title.active {
+        font-weight: bolder;
+    }
+
+/*==============================
+           List
+=================================*/
+.list.cuslist .item .description {
+    padding-left: 10px;
+}
+
+.list.cuslist .item.red {
+    color: #da2323;
+}
+
+    .list.cuslist .item.red .header, .list.cuslist .item.red .description {
+        color: #da2323;
+    }
+
+.list.cuslist .item.orange {
+    color: #f26e17;
+}
+
+    .list.cuslist .item.orange .header, .list.cuslist .item.orange .description {
+        color: #f26e17;
+    }
+
+.list.cuslist .item.yellow {
+    color: #fbbd06;
+}
+
+    .list.cuslist .item.yellow .header, .list.cuslist .item.yellow .description {
+        color: #fbbd06;
+    }
+
+.list.cuslist .item.olive {
+    color: #bcd12d;
+}
+
+    .list.cuslist .item.olive .header, .list.cuslist .item.olive .description {
+        color: #bcd12d;
+    }
+
+.list.cuslist .item.green {
+    color: #1cb841;
+}
+
+    .list.cuslist .item.green .header, .list.cuslist .item.green .description {
+        color: #1cb841;
+    }
+
+.list.cuslist .item.teal {
+    color: #00b3ab;
+}
+
+    .list.cuslist .item.teal .header, .list.cuslist .item.teal .description {
+        color: #00b3ab;
+    }
+
+.list.cuslist .item.blue {
+    color: #1c82cf;
+}
+
+    .list.cuslist .item.blue .header, .list.cuslist .item.blue .description {
+        color: #1c82cf;
+    }
+
+.list.cuslist .item.violet {
+    color: #6435c9;
+}
+
+    .list.cuslist .item.violet .header, .list.cuslist .item.violet .description {
+        color: #6435c9;
+    }
+
+.list.cuslist .item.purple {
+    color: #ab46cd;
+}
+
+    .list.cuslist .item.purple .header, .list.cuslist .item.purple .description {
+        color: #ab46cd;
+    }
+
+.list.cuslist .item.pink {
+    color: #df3494;
+}
+
+    .list.cuslist .item.pink .header, .list.cuslist .item.pink .description {
+        color: #df3494;
+    }
+
+.list.cuslist .item.brown {
+    color: #ad7551;
+}
+
+    .list.cuslist .item.brown .header, .list.cuslist .item.brown .description {
+        color: #ad7551;
+    }
+
+.list.cuslist .item.grey {
+    color: #757575;
+}
+
+    .list.cuslist .item.grey .header, .list.cuslist .item.grey .description {
+        color: #757575;
+    }
+
+.list.trace .item.active {
+    background-color: #ffff6f;
+    cursor: pointer;
+    border: 1px solid #64dde9;
+}
+
+/*==========================
+           item
+============================*/
+.items .item.cusred .content .header, .items .item.cusred .content .description {
+    color: #da2323;
+}
+
+.items .item.cuswhite .content .header, .items .item.cuswhite .content .description {
+    color: #fff;
+}
+
+/*============
+    table
+=============*/
+.ui.table.cushead thead tr:nth-of-type(1) th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+.ui.table.cushead tbody tr td img {
+    border-radius: 5px;
+}
+
+    .ui.table.cushead tbody tr td img:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+
+/*=============
+    header
+==============*/
+.ui.cusblue.header {
+    color: #314974;
+    font-weight: bolder;
+}
+
+.ui.cusorange.header {
+    color: #ff7800;
+    font-weight: bolder;
+}
+
+/*=============
+    a link
+===============*/
+a.cusunderline {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a.onlyunderline {
+    text-decoration: underline;
+}
+
+/*==============
+    form
+================*/
+.ui.form .inline.fields .field input, .ui.form .inline.fields .field select {
+    width: 100%;
+}
+
+.ui.form .inline.field .field input, .ui.form .inline.field .field select {
+    width: 100%;
+}
+
+.ui.form .inline input, .ui.form .inline .dropdown {
+    -webkit-box-shadow: 0.5px 1px 0px #c5c5c5;
+    -moz-box-shadow: 0.5px 1px 0px #c5c5c5;
+    /* 老的 Firefox */
+    box-shadow: 0.5px 1px 0px #c5c5c5;
+}
+
+    .ui.form .inline input.underline {
+        -webkit-box-shadow: 0px 1px 0px #c5c5c5;
+        -moz-box-shadow: 0px 1px 0px #c5c5c5;
+        /* 老的 Firefox */
+        box-shadow: 0px 1px 0px #c5c5c5;
+        border-radius: 0;
+        border: 0;
+        border-bottom: 2px 1px 0px #c5c5c5;
+    }
+
+    .ui.form .inline input.noborder, .ui.form .inline .dropdown.icon {
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        border-radius: 0;
+        border: 0;
+    }
+
+    .ui.form .inline input.padfill {
+        width: 80% !important;
+    }
+
+.ui.form .inline .input input.fill {
+    width: 100% !important;
+}
+
+.ui.form .inline .input input.padfill {
+    width: 80% !important;
+}
+
+.ui.form .inline .dropdown.fill {
+    width: 100% !important;
+}
+
+.ui.form .inline .dropdown.padfill {
+    width: 80% !important;
+}
+
+/*========================
+    dropdown
+=========================*/
+.ui.dropdown > .dropdown.icon::before {
+    font-family: 'Icons';
+    content: "\f107" !important;
+}
+
+/*==============
+    label
+================*/
+.label.white {
+    background-color: #fff;
+    border: .5px solid #ccc;
+    box-shadow: none;
+}
+
+label.labelteal {
+    color: #02b5ad;
+}
+
+label.labelorange {
+    color: #f26e17;
+}
+
+label.labelgrey {
+    color: #b6b6b6;
+}
+
+/*=============
+     input
+ ==============*/
+div.input input {
+    border: .5px solid #ccc;
+}
+
+/*==============
+     star rating
+ ==============*/
+.ui.rating.cusorange i.icon.active {
+    color: #ff7800;
+}
+
+.ui.rating.cusgreen i.icon.active {
+    color: #23c7b7;
+}
+
+/*===================
+     column
+ ======================*/
+.ui.grid .column.innercolumn {
+    padding: 0 20px;
+    margin-top: 15px;
+}
+
+.ui.grid .column.cusgrey {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+@media screen and (max-width: 765px) {
+    .ui.grid .column.innercolumn {
+        padding: 0 10px;
+    }
+}
+
+/*.column.darkblue {
+    background-color: #1d2939;
+}*/
+
+/*================
+     span
+ ===================*/
+span.space1::before {
+    content: " ";
+}
+
+span.space2::before {
+    content: "  ";
+}
+
+span.space3::before {
+    content: "   ";
+}
+
+span.space4::before {
+    content: "    ";
+}
+
+span.space5::before {
+    content: "     ";
+}
+
+span.space6::before {
+    content: "      ";
+}
+
+span.space7::before {
+    content: "       ";
+}
+
+span.space8::before {
+    content: "        ";
+}
+
+span.space9::before {
+    content: "         ";
+}
+
+span.space10::before {
+    content: "          ";
+}
+
+span.space11::before {
+    content: "           ";
+}
+
+span.space12::before {
+    content: "            ";
+}
+
+/*@media screen and (max-width: 765px) {
+   span{
+     &.space1::before,&.space2::before,&.space3::before,
+     &.space4::before,&.space5::before,&.space6::before,
+     &.space7::before,&.space8::before,&.space9::before,
+     &.space10::before,&.space11::before,&.space12::before{ content:'';}
+  }
+ }*/
+/*============================================
+                     table
+  ===============================================*/
+.ui.table tbody tr td a {
+    text-decoration: underline;
+}
+
+.ui.table tbody.linkpointer tr td a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ui.table tbody.trpointer tr {
+    cursor: pointer;
+}
+
+/*===================================
+                    checkbox-cusdarkblue
+  =======================================*/
+.ui.form .fields .field .checkbox.cusdarkblue:not(.toggle):not(.slider) label,
+.ui.form .fields .field .checkbox.cusdarkblue:not(.toggle):not(.slider) .box, .ui.form .field .checkbox.cusdarkblue:not(.toggle):not(.slider) label,
+.ui.form .field .checkbox.cusdarkblue:not(.toggle):not(.slider) .box {
+    color: #616161;
+}
+
+    .ui.form .fields .field .checkbox.cusdarkblue:not(.toggle):not(.slider) label:before,
+    .ui.form .fields .field .checkbox.cusdarkblue:not(.toggle):not(.slider) .box:before, .ui.form .field .checkbox.cusdarkblue:not(.toggle):not(.slider) label:before,
+    .ui.form .field .checkbox.cusdarkblue:not(.toggle):not(.slider) .box:before {
+        background: #FFF6F6;
+        border-color: #616161;
+    }
+
+.ui.form .fields .field .checkbox.cusdarkblue label:after,
+.ui.form .fields .field .checkbox.cusdarkblue .box:after, .ui.form .field .checkbox.cusdarkblue label:after,
+.ui.form .field .checkbox.cusdarkblue .box:after {
+    background-color: #0b285a;
+    color: #fff;
+}
+
+.ui.form .fields .field .checkbox.cusdarkblue.checked.labelteal:not(.toggle):not(.slider) label,
+.ui.form .fields .field .checkbox.cusdarkblue.checked.labelteal:not(.toggle):not(.slider) .box, .ui.form .field .checkbox.cusdarkblue.checked.labelteal:not(.toggle):not(.slider) label,
+.ui.form .field .checkbox.cusdarkblue.checked.labelteal:not(.toggle):not(.slider) .box {
+    color: #02b5ad;
+}
+
+.ui.form .fields .field .checkbox.cusdarkblue.checked.labelorange:not(.toggle):not(.slider) label,
+.ui.form .fields .field .checkbox.cusdarkblue.checked.labelorange:not(.toggle):not(.slider) .box, .ui.form .field .checkbox.cusdarkblue.checked.labelorange:not(.toggle):not(.slider) label,
+.ui.form .field .checkbox.cusdarkblue.checked.labelorange:not(.toggle):not(.slider) .box {
+    color: #f26e17;
+}
+
+.ui.form .fields .field .checkbox.cusdarkblue.checked.labelgrey:not(.toggle):not(.slider) label,
+.ui.form .fields .field .checkbox.cusdarkblue.checked.labelgrey:not(.toggle):not(.slider) .box, .ui.form .field .checkbox.cusdarkblue.checked.labelgrey:not(.toggle):not(.slider) label,
+.ui.form .field .checkbox.cusdarkblue.checked.labelgrey:not(.toggle):not(.slider) .box {
+    color: #b6b6b6;
+}
+
+
+.TotalTitle {
+    font-size: large;
+    color: darkblue;
+    font-family: Microsoft JhengHei;
+}
+
+.QueryHeader {
+    color: #003377;
+    font-family: Microsoft JhengHei;
+}
+
+.ListHeader {
+    color: #003377;
+    font-family: Microsoft JhengHei;
+}
+
+/*googlemap infowindow*/
+.dark_mapinfo {
+    margin-top: 8px;
+    padding: 10px;
+    width: 70%;
+    color: #fff;
+    background-color: #203a68;
+    min-height: 50px;
+    z-index: 999999;
+}

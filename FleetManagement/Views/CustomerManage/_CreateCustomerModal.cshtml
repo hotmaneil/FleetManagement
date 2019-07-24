@@ -1,0 +1,79 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="ui tiny modal" id="CreateCustomerModal">
+    <div class="header">
+        新增客戶
+    </div>
+    <div class="content">
+        <form id="CreateCustomerForm" method="post" class="ui form" autocomplete="off">
+
+            <input type="hidden" id="CompanyId" name="CompanyId" value="@TempData["CompanyId"]" />
+
+            <div class="two fields">
+                <div class="field">
+                    <label>車行統編</label>
+                    <input type="text" id="TaxNumber" name="TaxNumber" placeholder="請輸入車行統編" />
+                </div>
+
+                <div class="field">
+                    <label>客戶名稱</label>
+                    <input type="text" id="Name" name="Name" placeholder="請輸入客戶名稱" />
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="field">
+                    <label>主聯絡人</label>
+                    <input type="text" id="MainContacter" name="MainContacter" placeholder="請輸入主聯絡人" />
+                </div>
+
+                <div class="field">
+                    <label>聯絡電話</label>
+                    <input type="text" id="ContactPhoneNumber" name="ContactPhoneNumber" placeholder="請輸入聯絡電話" />
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="field">
+                    <label>副聯絡人</label>
+                    <input type="text" id="SubContacter" name="SubContacter" placeholder="請輸入副聯絡人" />
+                </div>
+
+                <div class="field">
+                    <label>負責人</label>
+                    <input type="text" id="PersonInCharge" name="PersonInCharge" placeholder="請輸入負責人" />
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="field">
+                    <label></label>
+                </div>
+
+                <div class="inline fields">
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="As" id="AsMainContacter">
+                            <label>同主聯絡人</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="As" id="AsSubContacter">
+                            <label>同副聯絡人</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <div class="ui grey deny button">取消</div>
+                <button type="submit" class="ui teal ok button">儲存</button>
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,241 @@
+﻿@using ViewModel.Booking;
+
+@model BookingViewModel
+
+@{
+    var function = !string.IsNullOrEmpty(Model.MessageId) ? "編輯" : "新增";
+    ViewBag.Title = function + "訂單";
+
+    int itemRowNum = 0;
+}
+
+@helper GoodsPhotoList(BookingGoodsPhotoContainer item, int itemRowNum)
+{
+    <div class="card">
+        <div class="image">
+            <img src="~/PhotoGoods/@Model.GoodOwnerId/@Model.MessageId/@item.PhotoFileName" />
+        </div>
+
+        <div class="extra">
+            <button class="ui inverted red button"
+                    BookingGoodsPhotoId="@item.Id"
+                    GoodOwnerId="@Model.GoodOwnerId"
+                    MessageId="@Model.MessageId"
+                    PhotoFileName="@item.PhotoFileName">
+                刪除圖片
+            </button>
+        </div>
+    </div>
+}
+
+@Html.Partial("~/Views/Map/_GoogleMapJS.cshtml")
+
+<link href="~/Content/bower_components/Datetimepicker/jquery.datetimepicker.css" rel="stylesheet" />
+<script src="~/Content/bower_components/moment/moment.js"></script>
+<script src="~/Content/bower_components/Datetimepicker/jquery.datetimepicker.full.js"></script>
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <h3 class="ui header">訂車客服</h3>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            @using (Html.BeginForm("Save", "OrderClientService", FormMethod.Post, new { @class = "ui form", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
+            {
+                @Html.HiddenFor(model => model.MessageId)
+
+                <h3 class="QueryHeader">@ViewBag.Title</h3>
+
+                @Html.AntiForgeryToken()
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>貨主姓名</label>
+                        @Html.DropDownListFor(model => model.GoodOwnerId, new SelectList(ViewBag.CustomerList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>聯絡電話</label>
+                        @Html.TextBoxFor(model => model.GoodOwnerContactPhoneNumber, new { @class = "ui disabled input" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>預約上車</label>
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.BookingDate)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>接貨地點</label>
+                        @Html.TextBoxFor(model => model.StartAddress)
+                        @Html.HiddenFor(model => model.StartAreaLevel12)
+                        @Html.HiddenFor(model => model.StartAreaLevel3)
+                        @Html.HiddenFor(model => model.StartPostalCode)
+                        @Html.HiddenFor(model => model.StartLat)
+                        @Html.HiddenFor(model => model.StartLng)
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>訂單建立時間</label>
+                        @Html.DisplayFor(model=>model.CreateTime)
+                    </div>
+
+                    <div class="field">
+                        <label>送達地點</label>
+                        @Html.TextBoxFor(model => model.TargetAddress)
+                        @Html.HiddenFor(model => model.TargetAreaLevel12)
+                        @Html.HiddenFor(model => model.TargetAreaLevel3)
+                        @Html.HiddenFor(model => model.TargetPostalCode)
+                        @Html.HiddenFor(model => model.TargetLat)
+                        @Html.HiddenFor(model => model.TargetLng)
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>貨品尺寸</label>
+                        <div class="ui right labeled input">
+                            @Html.TextBoxFor(model => model.GoodsSizeLength, new { @Placeholder = "長" })
+                            @Html.TextBoxFor(model => model.GoodsSizeWide, new { @Placeholder = "寬" })
+                            @Html.TextBoxFor(model => model.GoodsSizeHeight, new { @Placeholder = "高" })
+                            <div class="ui basic label">
+                                cm
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>貨品重量</label>
+                        <div class="ui right labeled input">
+                            @Html.TextBoxFor(model => model.GoodsWeight)
+                            <div class="ui basic label">
+                                kg
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="two fields">
+                        <div class="field">
+                            <label>特殊需求</label>
+
+                            <div class="ui radio checkbox">
+                                <input type="radio" class="hidden" readonly="" tabindex="0" />
+                                <label>可載冷藏</label>
+                            </div>
+
+                            <div class="ui radio checkbox">
+                                <input type="radio" class="hidden" readonly="" tabindex="0" />
+                                <label>易碎加收</label>
+                            </div>
+
+                            <div class="ui radio checkbox">
+                                <input type="radio" class="hidden" readonly="" tabindex="0" />
+                                <label>xxx</label>
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="two fields">
+                    <div class="field">
+                        <label>貨品照片</label>
+
+                        <div class="ui four cards" id="ImageList">
+                            @foreach (var item in Model.BookingGoodsPhotoList)
+                            {
+                                @GoodsPhotoList(item, itemRowNum++)
+                            }
+                        </div>
+
+                        <input type="file" id="goodsPhotoUpload" name="goodsPhotoUpload" multiple="multiple" />
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>其他備註</label>
+                        @Html.TextBoxFor(model => model.AdditionMessage)
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="two field">
+                        <label>任務執行</label>
+                        <!--車主-->
+                        @Html.DropDownListFor(model => model.DriverId, new SelectList(ViewBag.DriverList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+
+                    <div class="two field">
+                        <label>車號</label>
+                        @Html.DropDownListFor(model => model.VehicleId, new SelectList(ViewBag.VehicleLicenseNumberList, "Value", "Text"), new { @class = "ui dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="two field">
+                        <label>運費</label>
+                        <div class="ui right labeled input">
+                            @Html.TextBoxFor(model => model.OfferPrice)
+                            <div class="ui basic label">
+                                元
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="ui two column centered grid">
+                    <button type="button" class="ui grey cancel button" id="backToIndexBtn">取消</button>
+                    <button type="submit" class="ui teal ok button" id="submitBtn">送出</button>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/DatepickerJs")
+
+@section Scripts{
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/OrderClientService',
+            name: 'Scripts/OrderClientService',
+            out: '~/Scripts/OrderClientService/create.js'
+        });
+        require(["create"]);
+
+        $(function () {
+            //更換另一個日月曆元件
+            //$('#BookingDate').calendar({
+            //    type: 'date',
+            //    text: {
+            //        months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            //        monthsShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+            //    },
+            //    formatter: {
+            //        date: function (date, settings) {
+            //            return moment(date).format("YYYY/MM/DD");
+            //        }
+            //    }
+            //});
+
+            var bookingDate = $('#BookingDate').val();
+            $('#BookingDate').val(bookingDate);
+            jQuery('#BookingDate').datetimepicker();
+            jQuery.datetimepicker.setLocale('zh-TW');
+        });
+    </script>
+}

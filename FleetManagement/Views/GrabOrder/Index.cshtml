@@ -1,0 +1,293 @@
+﻿@using ViewModel.Booking
+@using System.Web.Configuration;
+@model BaseBookingSearchModel
+
+@{
+    ViewBag.Title = "網路搶單首頁";
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+@Styles.Render("~/Content/DatepickerCss")
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="QueryHeader">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post">
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>開始時間</label>
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.BeginDateTime, new { placeholder = "請輸入開始時間" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>結束時間</label>
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.EndDateTime, new { placeholder = "請輸入結束時間" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>地區</label>
+                        @Html.DropDownListFor(model => model.PostalCode, new SelectList(ViewBag.SelectPostalCodeList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="four wide field" style="margin:auto;">
+                        <button class="ui custeal button circular fluid" type="submit">查詢</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="sixteen wide column">
+            <div class="ui top attached segment">
+                <div class="ui stackable grid equal width">
+
+                    <div class="column left aligned">
+                        <h3 class="ListHeader">訂單列表</h3>
+
+                        @*<div class="row">
+                                <button class="small ui orange button">
+                                    未執行
+                                </button>
+
+                                <button class="small ui button">
+                                    執行中
+                                </button>
+
+                                <button class="small ui button">
+                                    已完成
+                                </button>
+
+                                <button class="small ui button">
+                                    全部
+                                </button>
+                            </div>*@
+
+                    </div>
+
+                    <div class="column right aligned">
+
+                        <div class="row">
+                            <form id="exportForm">
+                                <select class="ui dropdown" id="exportType">
+                                    <option value="Excel">Excel</option>
+                                    @*<option value="Pdf">Pdf</option>*@
+                                </select>
+                                <button class="ui facebook button" type="submit" id="submitBtn">輸出</button>
+                                @*<button class="ui grey button" type="button" id="PrintBtn">Print</button>*@
+                            </form>
+
+                            @using (Html.BeginForm("DownLoadExcel", "GrabOrder", FormMethod.Post, new { @id = "DownLoadExcel" }))
+                            {
+
+                            }
+                        </div>
+
+                        <div class="row" style="margin-top:10px;">
+                            <div class="ui search">
+                                @*<div class="ui icon input">
+                                        <input class="prompt" type="text" placeholder="請輸入關鍵字" id="SearchWord">
+                                        <i class="search icon"></i>
+                                    </div>*@
+                                <div class="results"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui attached segment left aligned">
+                <div id="dataTable">
+                    <div class="ui icon blue message">
+                        <i class="search icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                請先輸入查詢條件
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--新增Modal-->
+<div id="createModel" class="ui mini modal">
+    <div class="header">
+        送出報價
+    </div>
+
+    <div class="content">
+        <form class="ui form" id="CreateQuoteForm" autocomplete="off">
+
+            <div class="field">
+                <label>免責聲明</label>
+                <textarea>1. 卡車幫APP(以下稱「卡車幫」) 僅為網路交易之服務平台，由會員自行刊載車輛、貨品及運費等相關資訊，以便於會員間進行物品運送等交易，實際的交易主體及物品運送等合約及行為乃存在於車主與貨主之間，卡車幫對於這些合約及行為不承擔責任與義務，卡車幫上所刊載之車輛、貨品、說明內容、報價及任何相關訊息或圖片，均係由會員自行提供、上載、及發布，並由系統自動刊載於網站，卡車幫對於其內容之真實性、合法性、即時性、安全性及正確性、對於車主或貨主履行交易之意願、能力及品質等，卡車幫概不負任何明示、默示、直接或間接之承諾、擔保或責任。
+                        卡車幫亦不涉入會員間之交易，車主與貨主間應自行就交易金額、條件、方式及內容等事項為協商及確認，車主與貨主雙方承擔有關其運送合約、訊息或廣告刊登、擔保及類似事項之全部責任，如發生爭議，車主與貨主雙方應自行相互協調、解決爭議。
+                        車主同意並保證，所提供運送服務之車輛，均為依法得提供運送物品及相關服務之營業用車輛，且實際提供運送服務者應為依法具有提供此運送服務之資格者(包括但不限於具有提供此運送服務之職業駕駛執照)，且依法得對外經營此運送服務，而實際提供運送服務之車輛與刊載及報價之車輛相同。
+                        車主並同意遵守以下規則:應於約定期間內運送託運物品，運送物達到目的地時，應即通知受貨人及貨主。
+                        運送物因包皮有易見之瑕疵而喪失或毀損時，運送人如於接收該物時，應向貨主告知此部分由貨主自行負責，如不告知或不為保留者，車主應負責任。
+                        車主非有急迫之情事，並可推定貨主若知有此情事亦允許變更其指示者，不得變更貨主對於運送之指示。
+                        受貨人所在不明或對運送物受領遲延或有其他交付上之障礙時，車主應即通知貨主，並請求其指示。
+                        車主對於運送物之喪失、毀損或遲到，應負責任。
+                        但車主能證明其喪失、毀損或遲到，係因不可抗力或因運送物之性質或因貨主或受貨人之過失而致者，不在此限。
+                        車主應依報價履行運送契約，不得於貨主同意報價或接受貨主之報價後，任意調漲或加價，但如因可歸責於貨主或受貨人之因素，而有調整價格之必要，該調整應符合市場行情且應取得貨主之同意。
+                        貨主同意並保證遵守以下規則:\n3.1. 所託運物品，均為依法得運載之物品，如有特殊物品或依法應另行申請或有特殊載運規定者，應自行確認並符合相關法令規定。
+                        如運送物依其性質，對於人或財產有致損害之虞者，貨主於刊載運送需求時應註明，並應將其性質明確告知車主。
+                        如所託運物品為金錢、有價證券、珠寶或其他貴重物品，貨主應於託運時於刊載運送需求時應註明並向車主明確告知其性質及價值者。
+                        貨主應依交易成立之運送內容、範圍、方式、費用等履行運送契約，不得於交易成立後或履行過程中，任意變更交易內容或要求調整價格，但如因可歸責於車主之因素，而有變更交易內容或調整價格之必要，應取得車主之同意，且價格之調整應符合市場合理行情。
+                </textarea>
+            </div>
+
+            @Html.Hidden("quoteMessageId")
+
+            <div class="field">
+                <label>報價</label>
+                <div class="ui right labeled input">
+                    <input type="text" id="quotePrice" name="quotePrice" />
+                    <div class="ui basic label">
+                        元
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="StringValue">車主</label>
+                @Html.DropDownList("DriverId", new SelectList(ViewBag.DriverList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="field">
+                <label for="StringValue">車號</label>
+                @Html.DropDownList("VehicleLicenseNumber", new SelectList(ViewBag.VehicleList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="actions center aligned">
+                <div class="ui basic center aligned segment">
+                    <div class="ui cancel deny button large circular">
+                        取消
+                    </div>
+                    <button type="submit" class="ui ok custeal button large circular">送出</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div id="modifyModel" class="ui mini modal">
+    <div class="header">
+        修改報價
+    </div>
+
+    <div class="content">
+        <form class="ui form" id="ModifyQuoteForm" autocomplete="off">
+
+            @Html.Hidden("modifyQuotingMessageId")
+
+            <div class="field">
+                <label>報價</label>
+                <div class="ui right labeled input">
+                    <input type="text" id="modifyQuotePrice" name="modifyQuotePrice" />
+                    <div class="ui basic label">
+                        元
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="StringValue">車主</label>
+                @Html.DropDownList("modifyDriverId", new SelectList(ViewBag.DriverList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="field">
+                <label for="StringValue">車號</label>
+                @Html.DropDownList("modifyVehicleLicenseNumber", new SelectList(ViewBag.EditVehicleList, "Value", "Text"), new { @class = "ui dropdown" })
+            </div>
+
+            <div class="actions center aligned">
+                <div class="ui basic center aligned segment">
+                    <div class="ui cancel deny button large circular">
+                        取消
+                    </div>
+                    <button type="button" class="ui ok custeal button large circular">送出</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/DatepickerJs")
+
+@section Scripts{
+
+    <script src="~/Content/bower_components/tabularJS/js/tabulator.js"></script>
+    <script src="~/Content/bower_components/tabularJS/js/xlsx.full.min.js" type="text/javascript"></script>
+    <script src="~/Content/bower_components/semanticUI-Calendar/calendar.min.js"></script>
+    <link href="~/Content/bower_components/semanticUI-Calendar/calendar.min.css" rel="stylesheet" />
+
+    @*<script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>*@
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '@RelativePath' + 'Scripts/GrabOrder',
+            name: 'Scripts/GrabOrder',
+            out: '~/Scripts/GrabOrder/index.js',
+            paths: {
+                "tabulator": "../../Content/bower_components/tabularJS/js/tabulator.js",
+                //"pdfmake": "../../Content/bower_components/pdfmake/build/pdfmake.min",
+                //"vfs_fonts": "../../Content/bower_components/pdfmake/build/vfs_fonts",
+                "sharedfunction": "../Shared/function",
+                "sharedmodule": "../Shared/module",
+                "sharedtemplete": "../Shared/templete",
+                "sharedvfs": "../Shared/vfs",
+                "module": "module",
+                "service": "service",
+                "index": "index"
+            }
+        });
+        require(["index"]);
+
+        $("#BeginDateTime").datepicker({
+            dateFormat: "yy/mm/dd"
+        });
+
+        $("#EndDateTime").datepicker({
+            dateFormat: "yy/mm/dd"
+        });
+    </script>
+}
+
+

@@ -1,0 +1,169 @@
+﻿
+@using Microsoft.AspNet.Identity;
+@{
+    string userId = System.Web.HttpContext.Current.User.Identity.GetUserId() == null ? "" : System.Web.HttpContext.Current.User.Identity.GetUserId();
+    string username = System.Web.HttpContext.Current.User.Identity.GetUserName() == null ? "" : System.Web.HttpContext.Current.User.Identity.GetUserName();
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡車幫車隊管理系統網站</title>
+
+    <!--facebook設定-->
+    <meta property="og:url" content="#" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:title" content="卡車幫車隊管理系統網站" />
+    <meta property="og:description" content="提供合迪管理卡車幫系統" />
+    <meta property="og:image" content="~/Content/images/assets/hey_truck.svg" />
+
+    <!--Twitter卡數據-->
+    <meta name="twitter:card" content="卡車幫車隊管理系統網站">
+    <meta name="twitter:site" content="中租合迪">
+    <meta name="twitter:title" content="卡車幫HEY TURCK">
+    <meta name="twitter:description" content="卡車幫車隊管理系統網站">
+    <meta name="twitter:creator" content="author_handle">
+
+    <!--Twitter摘要卡圖片必須至少為120x120px-->
+    <meta name="twitter:image" content="~/Content/images/assets/hey_truck.svg">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    @Styles.Render("~/Content/css")
+    @RenderSection("styles", required: false)
+</head>
+
+@Scripts.Render("~/bundles/jquery")
+<body>
+    <div id="sidebar" class="ui sidebar vertical left menu push inverted visible" style="background-color:#36528d;height:100vh;overflow-y:auto;overflow-x:hidden;">
+        <a class="item" href="@Url.Action("Index","Home")">
+            <img class="ui centered image" src="~/Content/images/assets/hey_truck.svg" style="height:50px;">
+        </a>
+        @Html.Action("WebFunctionListByUser", "Home", new { area = "", username = @User.Identity.Name })
+    </div>
+
+    <div class="pusher">
+        <div id="mainPanel" class="ui basic segment changeWidth" style="min-height:100vh;background-color:#f2f2f2;">
+            <div class="ui grid">
+                <div class="sixteen wide column" style="background-color:#fff470;">
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        <div class="ui secondary menu">
+                            @Html.AntiForgeryToken()
+
+                            <a class="item" id="sidebarToggle">
+                                <i class="icon bars"></i>
+                                <div class="computerOnly">
+                                    <h5>卡車幫車隊管理系統網站</h5>
+                                </div>
+                            </a>
+
+                            <div class="right menu">
+                                <div class="item">
+                                    <i class="icon user"></i>
+                                    @username
+                                </div>
+                                <a class="item" href="@Url.Action("Index","Home")#todoSection">
+                                    <i class="icon bell"></i>待辦
+                                    <div class="floating ui red label" id="AccountTodoNumber">0</div>
+                                </a>
+                                <a class="ui item" href="javascript:document.getElementById('logoutForm').submit()">
+                                    登出
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="sixteen wide column">
+                    @RenderBody()
+                </div>
+                <div class="sixteen wide column">
+                    <footer>&copy; 中租迪和股份有限公司 Chailease Finance Co.,Ltd. All Rights Reserved.</footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.js?features=fetch,Promise"></script>
+
+
+    @RenderSection("scripts", required: false)
+    <script src="~/Content/bower_components/semanticUI-Calendar/calendar.min.js"></script>
+    <link href="~/Content/bower_components/semanticUI-Calendar/calendar.min.css" rel="stylesheet" />
+
+    <script>
+        $("#sidebarToggle").on("click", function () {
+            $(".ui.sidebar").sidebar({
+                dimPage: false,
+                closable: false
+            }).sidebar('toggle');
+            $("#mainPanel").toggleClass("changeWidth");
+        });
+
+        $('.ui.accordion').accordion();
+
+        //有選取的Controller讓accordion 展開
+        var controller = '@ViewContext.RouteData.Values["controller"]';
+
+        switch (controller)
+        {
+            case 'Mission':
+            case 'OrderClientService':
+            case 'GrabOrder':
+            case 'Dispatch':
+            case 'VehicleSchedules':
+                //businessManageContent
+                $('#21s6ef93-e08f-41a0-b1f6-514e9a02e9a9').removeClass('content').addClass('active content');
+                break;
+
+            case 'Report':
+                //reportContent
+                $('#a33db72d-f0f8-438d-9dbd-f63ddf7fdf99').removeClass('content').addClass('active content');
+                break;
+
+            case 'IncomeStatement':
+                //IncomeStatement
+                $('#d136ef93-e08f-41a0-b1f6-514e9a02e9a9').removeClass('content').addClass('active content');
+                break;
+
+            case 'CarManagement':
+                $('#5cc74f8b-8de7-4d15-85e5-3edac67761cd').removeClass('content').addClass('active content');
+                break;
+
+            case 'Role':
+            case 'WebAccount':
+                $('#d7826663-183f-4cb4-b0fb-418c7599010d').removeClass('content').addClass('active content');
+                break;
+        }
+
+        //共通函式
+        $('.ui.dropdown').dropdown();
+
+        $('.ui.checkbox').checkbox();
+
+        //semanticUI-calendar
+        $('.ui.calendar').calendar({
+            type: 'date',
+            formatter: {
+                date: function (date, settings) {
+                    if (!date) return '';
+                    var day = date.getDate() + '';
+                    if (day.length < 2) {
+                        day = '0' + day;
+                    }
+                    var month = (date.getMonth() + 1) + '';
+                    if (month.length < 2) {
+                        month = '0' + month;
+                    }
+                    var year = date.getFullYear();
+                    return year + '/' + month + '/' + day;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+

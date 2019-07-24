@@ -1,0 +1,278 @@
+﻿@using ViewModel.Booking;
+@using ViewModel.Message;
+
+@model BookingDetailViewModel
+
+@{
+
+    ViewBag.SubTitle = "任務明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int itemRowNum = 0;
+    int msgItemRowNum = 0;
+
+    var hrefIndex = string.Empty;
+    if (ViewBag.ControllerName == "Mission")
+    {
+        ViewBag.Title = "任務管理首頁";
+        hrefIndex = Url.Action("Index", "Mission");
+    }
+
+    if (ViewBag.ControllerName == "GrabOrder")
+    {
+        ViewBag.Title = "網路搶單首頁";
+        hrefIndex = Url.Action("Index", "GrabOrder");
+    }
+}
+
+@helper GoodsPhotoList(BookingGoodsPhotoContainer item, int itemRowNum)
+{
+    <li data-thumb="">
+        <img src="~/PhotoGoods/@Model.GoodOwnerId/@Model.MessageId/@item.PhotoFileName" />
+    </li>
+}
+
+@helper MessageRecordList(MessageViewModel item, int msgItemRowNum)
+{
+    <div class="event">
+        <div class="label">
+            <img src="~/PhotoUser/@item.SenderId/@item.SenderPhotoName">
+        </div>
+        <div class="content">
+            <a class="author">@item.SenderName</a>
+            <div class="summary">
+                @item.Content
+                <div class="date">
+                    @item.CreateTime
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Styles{
+    @Styles.Render("~/Content/lightsliderCss")
+}
+
+<div class="ui stackable grid">
+
+    <div class="sixteen wide column">
+        <div class="ui huge breadcrumb">
+            <a class="section" href="@hrefIndex">@ViewBag.Title</a>
+            <i class="right angle icon divider"></i>
+            <div class="active section">@ViewBag.SubTitle</div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+
+            <div class="ui stackable grid">
+
+                @Html.HiddenFor(model=>model.MessageId)
+
+                @*ui fontblue heading*@
+                <div class="sixteen wide column left aligned">
+                    <h3 class="QueryHeader">任務明細</h3>
+                </div>
+
+                <div class="sixteen wide column cusgrey left aligned" style="background-color:#f2f2f2;">
+                    <h4 class="ui fontblue heading">
+                        任務時間
+                        <span style="color:#333;">@Html.DisplayTextFor(model => model.BookingDate)</span>
+                    </h4>
+                </div>
+
+                <div class="sixteen wide column row">
+                    <table class="ui striped selectable large table">
+                        <tbody>
+                            <tr>
+                                <td class="fontdarkgrey">貨主姓名</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.GoodOwnerName)</td>
+                                <td class="fontdarkgrey">聯絡電話</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.GoodOwnerPhoneNumber)</td>
+                                <td class="fontdarkgrey">車主評分貨主</td>
+                                <td>
+                                    <div class="ui large rating cusorange" data-rating="@Model.GoodsOwnerEvaluation"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fontdarkgrey">車主姓名</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.DriverName)</td>
+                                <td class="fontdarkgrey">聯絡電話</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.DriverPhoneNumber)</td>
+                                <td class="fontdarkgrey">貨主評分車主</td>
+                                <td>
+                                    <div class="ui large rating cusgreen" data-rating="@Model.DriverScore"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fontdarkgrey">接貨地點</td>
+                                <td colspan="2" class="fontbold">@Html.DisplayTextFor(model => model.StartAddress)</td>
+                                <td class="fontdarkgrey">送貨地點</td>
+                                <td colspan="2" class="fontbold">@Html.DisplayTextFor(model => model.TargetAddress)</td>
+                            </tr>
+                            <tr>
+                                <td class="fontdarkgrey">貨品尺寸</td>
+                                <td class="fontbold">
+                                    @Html.DisplayTextFor(model => model.GoodsSizeLength)*
+                                    @Html.DisplayTextFor(model => model.GoodsSizeWide)*
+                                    @Html.DisplayTextFor(model => model.GoodsSizeHeight)
+                                    (cm<sup>3</sup>)
+                                </td>
+                                <td class="fontdarkgrey">貨品重量</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.GoodsWeight)kg</td>
+                                <td class="fontdarkgrey">成交運費</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.TransactionPrice)元</td>
+                            </tr>
+                            <tr>
+                                <td class="fontdarkgrey">期望報價</td>
+                                <td class="fontbold">@Html.DisplayTextFor(model => model.EstimatedFare)元</td>
+                                <td class="fontdarkgrey"></td>
+                                <td class="fontbold"></td>
+                                <td class="fontdarkgrey"></td>
+                                <td class="fontbold"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="sixteen wide column innercolumn">
+                    <div class="sixteen wide column cusgrey left aligned" style="background-color:#f2f2f2;padding:10px 5px;">
+                        <h4 class="ui fontblue heading">
+                            運送記錄
+                            <span style="color:#333;">2018-07-31 AM 10:52</span>
+                        </h4>
+                    </div>
+                    <div class="sixteen wide column">
+                        <table class="ui striped selectable large table">
+                            <tbody>
+                                <tr>
+                                    <td class="fontblue">前往</td>
+                                    <td class="fontdarkgrey">時間</td>
+                                    <td>@Html.DisplayTextFor(model => model.ForHiredStartTime)</td>
+                                    <td class="fontdarkgrey">地點</td>
+                                    <td>@Html.DisplayTextFor(model => model.HiredStartAddress)</td>
+                                </tr>
+                                <tr>
+                                    <td class="fontblue">定點</td>
+                                    <td class="fontdarkgrey">時間</td>
+                                    <td>@Html.DisplayTextFor(model => model.ArrivelEndTime)</td>
+                                    <td class="fontdarkgrey">地點</td>
+                                    <td>@Html.DisplayTextFor(model => model.HiredStartAddress)</td>
+                                </tr>
+                                <tr>
+                                    <td class="fontblue">上貨</td>
+                                    <td class="fontdarkgrey">時間</td>
+                                    <td>@Html.DisplayTextFor(model => model.HiredEndTime)</td>
+                                    <td class="fontdarkgrey">地點</td>
+                                    <td>@Html.DisplayTextFor(model => model.HiredStartAddress)</td>
+                                </tr>
+                                <tr>
+                                    <td class="fontblue">送達</td>
+                                    <td class="fontdarkgrey">時間</td>
+                                    <td>@Html.DisplayTextFor(model => model.GetoffEndTime)</td>
+                                    <td class="fontdarkgrey">地點</td>
+                                    <td>@Html.DisplayTextFor(model => model.GetoffStartAddress)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="sixteen wide column cusgrey left aligned" style="background-color:#f2f2f2;padding:10px 5px;">
+                        <h4 class="ui fontblue heading">其他檢視 <span style="color:#333;">2018-07-31 AM 10:52</span></h4>
+                    </div>
+                    <div class="sixteen wide column">
+                        <div class="ui segment">
+                            <div class="ui stackable grid">
+                                <div class="row">
+                                    <div class="four wide column">
+                                        <button class="ui basic cusblue button fluid circular" style="margin-top:8px;" id="GoodsPhotoBtn">貨品照片</button>
+                                        <button class="ui basic cusblue button fluid circular" style="margin-top:8px;" id="SignPhotoBtn">簽收照片</button>
+                                        <button class="ui basic cusblue button fluid circular" style="margin-top:8px;" id="TraceBtn">運送軌跡</button>
+                                        <button class="ui basic cusblue button fluid circular" style="margin-top:8px;" id="TalkLogBtn">對話記錄</button>
+                                        @*<button class="ui basic cusblue button fluid circular" style="margin-top:8px;" id="ShareRecord">分享記錄</button>*@
+                                    </div>
+                                    <div class="twelve wide column">
+                                        <div class="ui secondary segment" style="min-height:25vh;max-height:50vh;overflow-y:scroll;" id="scrollDiv">
+
+                                            <!--四種顯示-->
+                                            <!--貨品照片-->
+                                            <div class="ui basic inverted black segment" id="GoodsPhoto">
+                                                <ul id="vertical">
+                                                    @foreach (var item in Model.BookingGoodsPhotoList)
+                                                    {
+                                                        @GoodsPhotoList(item, itemRowNum++)
+                                                    }
+                                                </ul>
+                                            </div>
+
+                                            <!--簽收照片-->
+                                            <div class="ui segment" id="SignPhoto">
+                                                <img src="~/PhotoDeliver/@Model.DriverId/@Model.MessageId/@Model.DeliveryPhotoName" alt="簽收照片" class="ui image" />
+                                            </div>
+
+                                            <!--運送軌跡-->
+                                            <div id="traceMap" style="width:100%;height:100%;min-height:100vh;min-width:100%;padding-top:100px;">
+                                            </div>
+
+                                            <!--對話記錄-->
+                                            <div class="ui feed" style="background-color:white;padding:0 10px;" id="TalkLog">
+                                                @foreach (var msgItem in Model.MessageList)
+                                                {
+                                                    @MessageRecordList(msgItem, msgItemRowNum++)
+                                                }
+                                            </div>
+
+                                            <!--分享記錄-->
+                                            @*@Html.Partial("_ShareRecordResult", "Mission")*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("~/Views/Map/_GoogleMapJS.cshtml")
+
+@section Scripts{
+    @Scripts.Render("~/bundles/lightsliderJs")
+    <script>
+        $(document).ready(function () {
+            verticalSlider();
+        });
+
+        $('.rating').rating({
+            maxRating: 5
+        }).rating('disable');
+
+        /** 垂直滑動圖片 */
+        function verticalSlider() {
+            $('#vertical').lightSlider({
+                gallery: true,
+                item: 1,
+                vertical: true,
+                verticalHeight: 400,
+                vThumbWidth: 80,
+                thumbItem: 10,
+                thumbMargin: 6,
+                slideMargin: 0
+            });
+        }
+    </script>
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/Mission',
+            name: 'Scripts/Mission',
+            out: '~/Scripts/Mission/Detail.js'
+        });
+        require(["Detail"]);
+    </script>
+}

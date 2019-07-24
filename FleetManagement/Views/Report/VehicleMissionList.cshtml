@@ -1,0 +1,152 @@
+﻿@using ViewModel.Booking
+@model BookingReportMonthSearchModel
+
+@{
+    ViewBag.MainTitle = "月報表";
+    ViewBag.DetailTitle = "任務明細列表";
+}
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section" href="@Url.Action("MonthReport","Report")">@ViewBag.MainTitle</a>
+                >
+                <span id="licenseNumberLabel"></span>
+                >
+                @ViewBag.DetailTitle
+            </div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="ui header cusgreen">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post">
+
+                <div class="two fields">
+                    <div class="four wide field">
+                        <label>查詢月份</label>
+                        <div class="ui calendar" id="calendarMonth">
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.SearchYearMonth, null, new { placeholder = "" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="four wide field">
+                        <label>車行</label>
+                        @Html.DropDownListFor(model => model.SearchCompanyId, new SelectList(ViewBag.CompanyList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="four wide field">
+                        <label>車號</label>
+                        @Html.DropDownListFor(model => model.SearchVehicleId, new SelectList(ViewBag.VehicleLicenseNumberList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="four wide field">
+                        <label>車主</label>
+                        @Html.DropDownListFor(model => model.SearchDriverId, new SelectList(ViewBag.DriverList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="four wide field">
+                        <label>客戶</label>
+                        @Html.DropDownListFor(model => model.SearchGoodOwnerId, new SelectList(ViewBag.GoodOwnerList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="four wide field">
+                    <label style="visibility:hidden;">功能列表</label>
+                    <button class="ui button circular teal" type="submit" name="search">查詢</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui top attached segment">
+            <div class="ui stackable grid equal width">
+
+                <div class="column left aligned">
+                    <h3 id="ListHeader" class="ui header cusgreen">任務明細</h3>
+                </div>
+
+                <div class="column right aligned">
+
+                    <div class="row">
+                        <form id="exportForm">
+                            <select class="ui dropdown" id="exportType">
+                                <option value="Excel">Excel</option>
+                                @*<option value="Pdf">Pdf</option>*@
+                            </select>
+                            <button class="ui facebook button" type="submit" id="submitBtn">輸出</button>
+                        </form>
+                        @using (Html.BeginForm("DownLoadVehicleMissionExcel", "Report", FormMethod.Post, new { @id = "DownLoadExcel" }))
+                        {
+                        }
+                    </div>
+
+                    @*<div class="row" style="margin-top:10px;">
+                        <div class="ui search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="請輸入關鍵字" id="SearchWord">
+                                <i class="search icon"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div>*@
+                </div>
+
+                <div id="dataTable">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@section Scripts{
+
+    <script src="~/Content/bower_components/tabularJS/js/tabulator.js"></script>
+    <script src="~/Content/bower_components/tabularJS/js/xlsx.full.min.js" type="text/javascript"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+
+    <script src="~/Content/bower_components/semanticUI-Calendar/calendar.min.js"></script>
+    <link href="~/Content/bower_components/semanticUI-Calendar/calendar.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        $(function () {
+
+            requirejs.config({
+                baseUrl: '../Scripts/Report',
+                name: 'Scripts/Report',
+                out: '~/Scripts/Report/vehicleMission.js',
+                paths: {
+                    "tabulator": "../../Content/bower_components/tabularJS/js/tabulator.js",
+                    "pdfmake": "../../Content/bower_components/pdfmake/build/pdfmake.min",
+                    "vfs_fonts": "../../Content/bower_components/pdfmake/build/vfs_fonts",
+                    "sharedfunction": "../Shared/function",
+                    "sharedmodule": "../Shared/module",
+                    "sharedtemplete": "../Shared/templete",
+                    "sharedvfs": "../Shared/vfs",
+                    "module": "module",
+                    "service": "service",
+                    "index": "index"
+                }
+            });
+            require(["vehicleMission"]);
+
+            $('#calendarMonth').calendar({
+                type: 'month'
+            });
+        });
+    </script>
+}

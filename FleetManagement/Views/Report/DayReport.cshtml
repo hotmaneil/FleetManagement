@@ -1,0 +1,280 @@
+﻿@using ViewModel.Booking.Search;
+@model DayReportSearchViewModel
+
+@{
+    ViewBag.Title = "日報表";
+    ViewBag.SubTitle = "";
+}
+
+@Styles.Render("~/Content/css")
+@Styles.Render("~/Content/DatepickerCss")
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title > @ViewBag.SubTitle</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <h3 class="QueryHeader">條件查詢</h3>
+            <form id="SearchForm" class="ui form" method="post" autocomplete="off">
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>開始時間</label>
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.BeginDateTime, new { placeholder = "請輸入開始時間" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>結束時間</label>
+                        <div>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                @Html.TextBoxFor(model => model.EndDateTime, new { placeholder = "請輸入結束時間" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>車行</label>
+                        @Html.DropDownListFor(model => model.SearchCompanyId, new SelectList(ViewBag.CompanyList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>車號</label>
+                        @Html.DropDownListFor(model => model.SearchVehicleId, new SelectList(ViewBag.VehicleLicenseNumberList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="two fields">
+                    <div class="eight wide field">
+                        <label>車主</label>
+                        @Html.DropDownListFor(model => model.SearchDriverId, new SelectList(ViewBag.DriverList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+
+                    <div class="eight wide field">
+                        <label>客戶</label>
+                        @Html.DropDownListFor(model => model.SearchGoodOwnerId, new SelectList(ViewBag.GoodOwnerList, "Value", "Text"), new { @class = "ui search dropdown" })
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="four wide field" style="margin:auto;">
+                        <button class="ui custeal button circular fluid" type="submit">查詢</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui segment">
+            <div class="ui two column stackable grid">
+                <div class="column">
+                    <div class="ui two column stackable grid">
+                        <div class="row">
+                            <div class="column left aligned">
+                                <div class="ui basic segment">
+                                    <h3 class="QueryHeader">總運費</h3>
+                                </div>
+                            </div>
+                            <div class="column right aligned">
+                                <div class="ui horizontal statistic orange">
+                                    <div class="value">
+                                        <label id="TotalTransportationCharges"></label>
+                                    </div>
+                                    <div class="label">
+                                        元
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="ui two column stackable grid">
+                        <div class="row">
+                            <div class="column left aligned">
+                                <div class="ui basic segment">
+                                    <h3 class="QueryHeader">總趟次</h3>
+                                </div>
+                            </div>
+                            <div class="column right aligned">
+                                <div class="ui horizontal statistic orange">
+                                    <div class="value">
+                                        <label id="TotalTimes"></label>
+                                    </div>
+                                    <div class="label">
+                                        次
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sixteen wide column">
+        <div class="ui top attached segment">
+            <div class="ui stackable grid equal width">
+
+                <div class="column left aligned">
+                    <h3 class="ListHeader">
+                        <span id="beginDateTimeLabel"></span>
+                        ~
+                        <span id="endDateTimeLabel"></span>
+                        <span id="TitleLabel"></span>
+                    </h3>
+                </div>
+
+                <div class="column right aligned">
+
+                    <div class="row">
+                        <form id="exportForm">
+                            <select class="ui dropdown" id="exportType">
+                                <option value="Excel">Excel</option>
+                                @*<option value="Pdf">Pdf</option>*@
+                            </select>
+                            <button class="ui facebook button" type="submit" id="submitBtn">輸出</button>
+                            @*<button class="ui grey button" type="button" id="PrintBtn">Print</button>*@
+                        </form>
+
+                        @using (Html.BeginForm("DownLoadDriverDayReportExcel", "Report", FormMethod.Post, new { @id = "DriverTimesReport" }))
+                        {
+                            @Html.Hidden("TypeName", "Times")
+                        }
+
+                        @using (Html.BeginForm("DownLoadDriverDayReportExcel", "Report", FormMethod.Post, new { @id = "DriverChargeReport" }))
+                        {
+                            @Html.Hidden("TypeName", "Charge")
+                        }
+
+                        @using (Html.BeginForm("DownLoadVehicleDayReportExcel", "Report", FormMethod.Post, new { @id = "VehicleTimesReport" }))
+                        {
+                            @Html.Hidden("TypeName", "Times")
+                        }
+
+                        @using (Html.BeginForm("DownLoadVehicleDayReportExcel", "Report", FormMethod.Post, new { @id = "VehicleChargeReport" }))
+                        {
+                            @Html.Hidden("TypeName", "Charge")
+                        }
+
+                        @using (Html.BeginForm("DownLoadCustomerDayReportExcel", "Report", FormMethod.Post, new { @id = "CustomerTimesReport" }))
+                        {
+                            @Html.Hidden("TypeName", "Times")
+                        }
+
+                        @using (Html.BeginForm("DownLoadCustomerDayReportExcel", "Report", FormMethod.Post, new { @id = "CustomerCgargeReport" }))
+                        {
+                            @Html.Hidden("TypeName", "Charge")
+                        }
+                    </div>
+
+                    @*<div class="row" style="margin-top:10px;">
+                            <div class="ui search">
+                                <div class="ui icon input">
+                                    <input class="prompt" type="text" placeholder="請輸入關鍵字" id="SearchWord">
+                                    <i class="search icon"></i>
+                                </div>
+                                <div class="results"></div>
+                            </div>
+                        </div>*@
+                </div>
+
+                <div class="ui top attached tabular custabular menu" id="reportTab">
+                    <a class="item active" data-tab="driverTimesTab">司機趟次</a>
+                    <a class="item" data-tab="driverChargeTab">司機運費</a>
+                    <a class="item" data-tab="vehicleTimesTab">車輛趟次</a>
+                    <a class="item" data-tab="vehicleChargeTab">車輛運費</a>
+                    <a class="item" data-tab="customerTimeTab">客戶趟次</a>
+                    <a class="item" data-tab="customerChargeTab">客戶運費</a>
+                </div>
+
+                <div class="ui bottom attached tab segment active" data-tab="driverTimesTab">
+                    <div id="driverTimesDataTable"></div>
+                </div>
+
+                <div class="ui bottom attached tab segment" data-tab="driverChargeTab">
+                    <div id="driverChargeDataTable"></div>
+                </div>
+
+                <div class="ui bottom attached tab segment" data-tab="vehicleTimesTab">
+                    <div id="vehicleTimesDataTable"></div>
+                </div>
+
+                <div class="ui bottom attached tab segment" data-tab="vehicleChargeTab">
+                    <div id="vehicleChargeDataTable"></div>
+                </div>
+
+                <div class="ui bottom attached tab segment" data-tab="customerTimeTab">
+                    <div id="customerTimesDataTable"></div>
+                </div>
+
+                <div class="ui bottom attached tab segment" data-tab="customerChargeTab">
+                    <div id="customerChargeDataTable"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/DatepickerJs")
+
+@section Scripts{
+
+    <script src="~/Content/bower_components/tabularJS/js/tabulator.js"></script>
+    <script src="~/Content/bower_components/tabularJS/js/xlsx.full.min.js" type="text/javascript"></script>
+    <script src="~/Content/bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/Content/bower_components/pdfmake/build/vfs_fonts.js"></script>
+
+    <script src="~/Content/bower_components/semanticUI-Calendar/calendar.min.js"></script>
+    <link href="~/Content/bower_components/semanticUI-Calendar/calendar.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        $(function () {
+
+            requirejs.config({
+                baseUrl: '../Scripts/DayReport',
+                name: 'Scripts/DayReport',
+                out: '~/Scripts/DayReport/index.js',
+                paths: {
+                    "tabulator": "../../Content/bower_components/tabularJS/js/tabulator.js",
+                    "pdfmake": "../../Content/bower_components/pdfmake/build/pdfmake.min",
+                    "vfs_fonts": "../../Content/bower_components/pdfmake/build/vfs_fonts",
+                    "sharedfunction": "../Shared/function",
+                    "sharedmodule": "../Shared/module",
+                    "sharedtemplete": "../Shared/templete",
+                    "sharedvfs": "../Shared/vfs",
+                    "module": "module",
+                    "service": "service",
+                    "index": "index"
+                }
+            });
+            require(["index"]);
+        });
+
+        $("#BeginDateTime").datepicker({
+            dateFormat: "yy/mm/dd"
+        });
+
+        $("#EndDateTime").datepicker({
+            dateFormat: "yy/mm/dd"
+        });
+    </script>
+}

@@ -1,0 +1,125 @@
+﻿@using ViewModel.Company;
+@model CompanyDriverVehicleViewModel
+
+@{
+    ViewBag.Title = Model.DriverName + ">" + "編輯車輛";
+
+    var sourceList = new SelectList(new List<SelectListItem>(), "Value", "Text");
+
+    if (Model.CompanyDriverVehicleSelectListItemList != null)
+    {
+        sourceList = new SelectList(Model.CompanyDriverVehicleSelectListItemList, "Value", "Text", Model.CompanyDriverVehicleSelectListItemList.Select(x => x.Value));
+    }
+
+    var notSelectedUserVehicleList = new List<SelectListItem>();
+    var allVehicleList = new List<SelectListItem>();
+    allVehicleList = ViewBag.VehicleList;
+
+    foreach (var vehicleItem in allVehicleList)
+    {
+        if (sourceList.Any(x => x.Value == vehicleItem.Value))
+        {
+            continue;
+        }
+        notSelectedUserVehicleList.Add(vehicleItem);
+    }
+}
+
+<style>
+    .listboxPorperty {
+        width: 250px;
+        height: 200px;
+    }
+</style>
+
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui huge breadcrumb">
+            <a class="section">@ViewBag.Title</a>
+        </div>
+    </div>
+</div>
+
+<div class="ui grid">
+    <div class="sixteen wide column">
+        @using (Html.BeginForm("UpdateDriverVehicles", "BrandManagement", FormMethod.Post, new { @class = "ui form" }))
+        {
+            @Html.HiddenFor(model => model.CompanyId)
+            @Html.HiddenFor(model => model.DriverId)
+            @Html.HiddenFor(model => model.SaveResult)
+
+            <table class="ui celled table">
+                <tr>
+                    <th>
+                        已選取
+                    </th>
+
+                    <th>
+
+                    </th>
+
+                    <th>
+                        未選取
+                    </th>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.ListBox("sourceUserVehicleList", sourceList, new { @Class = "listboxPorperty", @size = "20" })
+                    </td>
+
+                    <td>
+                        <div>
+                            <button class="ui circular button basic" type="button" id="addVehicle">
+                                <i class="angle left icon"></i>
+                            </button>
+                            <button class="ui circular button basic" type="button" id="removeVehicle">
+                                <i class="angle right icon"></i>
+                            </button>
+
+                        </div>
+                    </td>
+
+                    <td>
+                        @Html.ListBox("notSelectedUserVehicleList", notSelectedUserVehicleList, new { @Class = "listboxPorperty", @size = "20" })
+                    </td>
+                </tr>
+            </table>
+
+            <div class="field">
+                <button type="submit" class="ui teal ok button" id="UpdateCompanyDriverVehiclesBtn">更新</button>
+                @if (Session["Control"].ToString() == "BrandManagement")
+                {
+                    <button type="button" class="ui blue button" id="backToDriverListBtn">回上一頁</button>
+                }
+                else if (Session["Control"].ToString() == "WebAccount")
+                {
+                    <button type="button" class="ui blue button" id="backToWebAccountBtn">回上一頁</button>
+                }
+
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/BrandManagement',
+            name: 'Scripts/BrandManagement',
+            out: '~/Scripts/BrandManagement/index.js'
+        });
+        require(["index"]);
+
+        var modelIsSuccess = "@Model.SaveResult";
+        if (modelIsSuccess != "") {
+            if (isSuccess = "True") {
+                toastr['success']('儲存成功!');
+            } else {
+                toastr['success']('儲存失敗!');
+            }
+        }
+    </script>
+}

@@ -1,0 +1,181 @@
+﻿@{
+    ViewBag.Title = "總覽中心";
+}
+
+@section Styles{
+    <style>
+        .ui.fluid.card .ui.small.image {
+            margin: auto;
+        }
+    </style>
+}
+
+<div class="ui grid">
+
+    <div class="sixteen wide column">
+        <h3 class="ui header">@ViewBag.Title</h3>
+    </div>
+
+    <div class="sixteen wide column">
+
+        <section id="HomeSection">
+
+            <div class="ui three stackable cards center aligned">
+
+                <div class="ui fluid card">
+                    <div class="ui small image">
+                        <img src="~/Content/images/assets/money.svg">
+                    </div>
+                    <div class="content">
+                        <h2 class="ui center aligned QueryHeader">
+                            運費
+                        </h2>
+                    </div>
+
+                    <div class="content center aligned">
+
+                        <div class="ui one statistics">
+                            <div class="teal statistic">
+                                <div class="label">
+                                    <h2 class="QueryHeader">本月累積</h2>
+                                </div>
+                                <div class="value">
+                                    <span id="ThisMonthTotalOfferPrice"></span>
+                                </div>
+                                <div class="label">
+                                    <h3 class="QueryHeader">元</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="extra content">
+
+                        <div class="ui one statistics">
+                            <div class="orange statistic">
+                                <div class="label">
+                                    <h2 class="QueryHeader">本日累積</h2>
+                                </div>
+                                <div class="value">
+                                    <span id="TodayTotalOfferPrice"></span>
+                                </div>
+                                <div class="label">
+                                    <h3 class="QueryHeader">元</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="ui fluid card">
+                    <div class="ui small image">
+                        <img src="~/Content/images/assets/mission.svg">
+                    </div>
+                    <div class="content">
+                        <h2 class="ui center aligned QueryHeader">
+                            任務
+                        </h2>
+                    </div>
+
+                    <div class="content center aligned">
+
+                        <div class="ui one statistics">
+                            <div class="teal statistic">
+                                <div class="label">
+                                    <h2 class="QueryHeader">本月累積</h2>
+                                </div>
+                                <div class="value">
+                                    <span id="ThisMonthTaskSum"></span>
+                                </div>
+                                <div class="label">
+                                    <h3 class="QueryHeader">件</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="extra content">
+                        <div class="ui one statistics">
+                            <div class="orange statistic">
+                                <div class="label">
+                                    <h2 class="QueryHeader">本日累積</h2>
+                                </div>
+                                <div class="value">
+                                    <span id="TodayTaskSum"></span>
+                                </div>
+                                <div class="label">
+                                    <h3 class="QueryHeader">件</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui fluid card">
+                    <div class="ui small image">
+                        <img src="~/Content/images/assets/ok.svg">
+                    </div>
+                    <div class="content">
+                        <h2 class="ui center aligned QueryHeader">
+                            已完成
+                        </h2>
+                    </div>
+
+                    <div class="content center aligned">
+
+                        <div class="ui one statistics">
+                            <div class="teal statistic">
+                                <div class="label">
+                                    <h2 class="QueryHeader">本月累積</h2>
+                                </div>
+                                <div class="value">
+                                    <span id="ThisMonthFinishedTaskCount"></span>
+                                </div>
+                                <div class="label">
+                                    <h3 class="QueryHeader">件</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="extra content">
+
+                        <div class="ui one statistics">
+                            <div class="orange statistic">
+                                <div class="label">
+                                    <h2 class="QueryHeader">本日累積</h2>
+                                </div>
+                                <div class="value">
+                                    <span id="TodayAlreadyFinishedTaskCount"></span>
+                                </div>
+                                <div class="label">
+                                    <h3 class="QueryHeader">件</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: "Scripts/Home",
+            paths: {
+                "index": "index",
+            },
+            name: 'Scripts/Home',
+            out: '~/Scripts/Home/index.js'
+        });
+        require(["index"]);
+
+    </script>
+
+}

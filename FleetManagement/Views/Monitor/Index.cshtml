@@ -1,0 +1,198 @@
+﻿@using ViewModel.Monitor;
+@using ResourceLibrary;
+@using ViewModel.Enum;
+@using System.Web.Configuration;
+
+@model StatusListCollention
+
+@{
+    ViewBag.Title = "即時監控首頁";
+    int itemRowNum = 0;
+    int itemGroupRowNum = 0;
+
+    string RelativePath = WebConfigurationManager.AppSettings["RelativePath"];
+}
+
+@Html.Partial("~/Views/Map/_GoogleMapJS.cshtml")
+
+@helper CStatuSstatisticsList(CStatuSstatisticsViewModel item, int itemRowNum)
+{
+    <tr>
+        <td>
+            <div class="ui checkbox">
+                <input type="checkbox" name="@item.CStatus" checked>
+                <label>@item.CStatusName</label>
+            </div>
+        </td>
+
+        <td>
+            @item.Count
+        </td>
+    </tr>
+}
+
+@helper GroupVehicleStatusList(GroupVehicleStatusViewModel item, int itemGroupRowNum)
+{
+    <div class="item">
+        <a class="active title">
+            <i class="dropdown icon"></i>
+            @item.GroupName
+        </a>
+
+        <div class="active content">
+            <div class="ui animated divided list cuslist">
+                @{
+                    int itemStatusRowNum = 0;
+                    foreach (var subitem in item.DriverVehicleStatusList)
+                    {
+                        @DriverVehicleStatusList(subitem, itemStatusRowNum++);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@helper DriverVehicleStatusList(DriverVehicleStatusViewModel item, int itemStatusRowNum)
+{
+    string color = string.Empty;
+    switch (item.CStatus)
+    {
+        case (byte)CStatusEnum.EmptyCar:
+            color = "teal";
+            break;
+
+        case (byte)CStatusEnum.Goto:
+            color = "olive";
+            break;
+
+        case (byte)CStatusEnum.Arrival:
+        case (byte)CStatusEnum.Hired:
+            color = "blue";
+            break;
+
+        case (byte)CStatusEnum.Close:
+            color = "grey";
+            break;
+
+        case (byte)CStatusEnum.Getoff:
+        case (byte)CStatusEnum.SignFor:
+            color = "orange";
+            break;
+    }
+
+    <div class="item @color" data-DriverUserId="@item.DriverId" data-GroupId="@item.GroupId" data-Status="@item.CStatus">
+        <div class="right floated content">
+            @item.StatusName
+        </div>
+        <div class="content">
+            <div class="header">@item.LicenseNumber  @item.DriverName</div>
+            <div class="description">@item.StatusName 於 @item.UpdateTime</div>
+        </div>
+    </div>
+}
+
+<style>
+    #legend {
+        background: #fff;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #ccc;
+    }
+
+        #legend img {
+            vertical-align: middle;
+        }
+</style>
+
+<div class="ui equal width stackable grid">
+
+    <div class="row left aligned">
+        <div class="column">
+            <div class="ui huge breadcrumb">
+                <a class="section">@ViewBag.Title</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="ui stackable grid" style="min-height:calc(100vh - 30px);padding:0;overflow-x:hidden;z-index:1;">
+
+    <div class="twelve wide column">
+        <div class="ui segment" style="height:100%">
+
+            <div class="twelve wide darkblue column" style="padding:0;margin:0;min-height:100%;max-height:100%;">
+
+                <h3 class="QueryHeader">地圖檢視</h3>
+
+                <!--地圖開始-->
+                <div id="googleMap" style="width:100%;height:100%;min-height:100vh;min-width:100%;padding-top:100px;">
+                </div>
+                <div id="legend">
+                    @*<h3>圖例</h3>*@
+                </div>
+                <!--地圖結束-->
+            </div>
+        </div>
+    </div>
+
+    <div class="four wide column">
+        <div class="ui segment" style="height:100%">
+            <div class="four wide column darkblue fontwhite" style="min-height:100%;max-height:100%;overflow-y:scroll;margin:0;">
+
+                <form class="ui form" id="SearchLocationForm">
+                    <div class="field">
+                        <div class="ui icon input">
+                            <input id="AssignSearch" class="controls" type="text" placeholder="請輸入查詢地址或座標">
+                            <button id="SearchLocationBtn" type="submit">
+                                <i class="search icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="ui pointing secondary menu cusblue">
+                    <a class="item active" data-tab="first">顯示設定</a>
+                    <a class="item" data-tab="second">狀態列表</a>
+                </div>
+
+                <div class="ui bottom attached tab segment active" data-tab="first">
+                    營業狀態
+
+                    <table class="ui very basic table" id="CheckboxList">
+                        @foreach (var item in Model.CStatuSstatisticsList)
+                        {
+                            @CStatuSstatisticsList(item, itemRowNum++)
+                        }
+                    </table>
+
+                </div>
+
+                <div class="ui bottom attached tab segment" data-tab="second">
+                    <div class="ui vertical accordion fluid borderless menu cusborderless" id="GroupList">
+                        @foreach (var item in Model.GroupVehicleStatusList)
+                        {
+                            @GroupVehicleStatusList(item, itemGroupRowNum)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/bower_components/mqttws31/mqttws31.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '@RelativePath'+'Scripts/Monitor',
+            name: 'Scripts/Monitor',
+            out: '~/Scripts/Monitor/index.js'
+        });
+        require(["index"]);
+
+        $('.menu .item').tab();
+    </script>
+}

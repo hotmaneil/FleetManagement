@@ -1,0 +1,104 @@
+﻿@using ViewModel.User
+@model UserModel
+
+@{
+    ViewBag.Title = "帳號基本資料編輯與明細";
+}
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <div class="ui huge breadcrumb">
+            <a class="section">@ViewBag.Title</a>
+        </div>
+    </div>
+</div>
+
+<div class="ui grid">
+
+    <!--帳號編輯Form-->
+    <div class="sixteen wide column">
+
+        <div class="ui grey inverted segment">編輯帳號</div>
+
+        @using (Html.BeginForm("Save", "WebAccount", FormMethod.Post, new { id = "UpdateAccountForm", @class = "ui form" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="two fields">
+                <div class="field">
+                    <label>帳號名稱</label>
+                    <input type="text" value="@Model.PhoneNumber" readonly>
+                    @Html.HiddenFor(model => model.PhoneNumber)
+                </div>
+
+                <div class="field">
+                    <label>真實姓名*</label>
+                    @Html.TextBoxFor(model => model.RealName, new { placeholder = "請輸入真實姓名..", @class = "eight wide column" })
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="field">
+                    <label>公司</label>
+                    @Html.DropDownListFor(model => model.CompanyId, new SelectList(ViewBag.CompanyList, "Value", "Text"), new { @class = "ui dropdown" })
+                </div>
+
+                <div class="field">
+                    <label>地區</label>
+                    @Html.DropDownListFor(model => model.Area, new SelectList(ViewBag.AreaList, "Value", "Text"), new { @class = "ui dropdown" })
+                </div>
+            </div>
+
+            <div class="ui secondary segment">
+
+                <div class="field">
+
+                    <div class="sixteen fields">
+                        <div class="field">
+                            <div class="ui icon labeled input">
+                                <div class="ui label">角色</div>
+                                @Html.DropDownList("RoleId", new SelectList(ViewBag.RoleList, "Value", "Text"), new { @class = "ui dropdown" })
+                            </div>
+
+                            <div class="field">
+                                <div class="ui label">功能列表</div>
+                                <table class="ui celled table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                功能名稱
+                                            </th>
+
+                                            <th>
+                                                啟用
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="FunctionList"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sixteen fields">
+                        <button type="submit" class="ui teal ok button">更新</button>
+                        <button type="button" class="ui blue button" id="backToIndexBtn">回上一頁</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '../Scripts/WebAccount',
+            name: 'Scripts/WebAccount',
+            out: '~/Scripts/WebAccount/index.js'
+        });
+        require(["index"]);
+    </script>
+}
